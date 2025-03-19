@@ -1,5 +1,4 @@
 #include <bits/stdc++.h>
-#include "variable.h"
 #include "function.h"
 using namespace std;
 
@@ -11,12 +10,14 @@ class client {
         client *userNext;
     public:
         client();
-        client(client*);
+        client(client*, string, string, string);
         ~client();
         client* getLast();
         int changeUserNext(client*);
         int checkUserId(string);
+        string getName();
         void print();
+        client *getClinet(string, string);
 };
 
 client::client() {
@@ -26,47 +27,17 @@ client::client() {
     userNext = NULL;
 }
 
-client::client(client *head) {
-    cout << endl;
-    for (int i = 0; i < printConst; i++) {
-        cout << "*";
-    }
-    cout << endl;
-    cout << "   Signup progress;" << endl << endl;
-    cout << "Enter your desired username (no spaces allowed):";
-    getline(cin, userName);
-    while (containSpace(userName)) {
-        cout << "   Username cannot contain spaces. Please try again." << endl << endl;
-        cout << "Enter your desired username (no spaces allowed):";
-        getline(cin, userName);
-    }
-    cout << endl;
-    cout << "Enter your desired user ID (numbers only): ";
-    getline(cin, userId);
-    while (containNumber(userId) == 1 || head->checkUserId(userId) == 0) {
-        if (head->checkUserId(userId) == 0) {
-            cout << "Error: ID has been taken, try again! " << endl << endl;
-        }
-        else {
-            cout << "Error: User ID must be a number. Please try again." << endl << endl;
-        }
-        cout << "Enter your desired user ID (numbers only): ";
-        getline(cin, userId);
-    }
-    cout << endl;
-    cout << "Enter your desired password (no spaces allowed): ";
-    getline(cin, userPass);
-    while (containSpace(userPass)) {
-        cout << "Error: Password cannot contain spaces. Please try again." << endl << endl;
-        cout << "Enter your desired password (no spaces allowed): ";
-        getline(cin, userPass);
-    }
-    cout << endl;
-    userNext = NULL;
+client::client(client *head, string userName, string userId, string userPass) {
+    this->userName = userName;
+    this->userId = userId;
+    this->userPass = userPass;
+    this->userNext = NULL;
     head->changeUserNext(this);
+    printSeparator(printConst);
     cout << "   Signup Successful!" << endl;
+    printSeparator(printConst);
+    cout << endl;
     this->print();
-    cout << "Thank you for signing up! You can now login with your credentials." << endl;
 }
 
 client::~client() {
@@ -103,16 +74,25 @@ int client::checkUserId(string id) {
 }
 
 void client::print() {
-    for (int i = 0; i < printConst; i++) {
-        cout << "*";
-    }
-    cout << endl << endl;
-    cout << "Usename: " << userName << endl;
-    cout << "User ID: " << userId << endl;
-    cout << "Password: " << userPass << endl;
+    cout << "Usename: " << userName;
     cout << endl;
-    for (int i = 0; i < printConst; i++) {
-        cout << "*";
+    cout << "User ID: " << userId;
+    cout << endl;
+    cout << "Password: " << userPass;
+    cout << endl;
+    cout << endl;
+}
+
+client* client::getClinet(string name, string pass) {
+    if (name == this->userName && pass == this->userPass) {
+        return this;
     }
-    cout << endl << endl;
+    if (this->userNext == NULL) {
+        return NULL;
+    }
+    return this->userNext->getClinet(name, pass);
+}
+
+string client::getName() {
+    return this->userName;
 }

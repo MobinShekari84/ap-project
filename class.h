@@ -2,8 +2,12 @@
 #include "function.h"
 using namespace std;
 
+// ==================================================================
+// ==================================================================
+// ==================================================================
+
 class client {
-    private:
+    protected:
         string userName;
         string userId;
         string userPass;
@@ -11,17 +15,16 @@ class client {
     public:
         client();
         client(client*, string, string, string);
-        ~client();
-        client* getLast();
+        virtual ~client();
         int changeUserNext(client*);
         int checkUserId(string);
         string getName();
-        void print();
+        virtual void print();
         client *getClinet(string, string);
 };
 
 client::client() {
-    userName = "HEAD";
+    userName = "HEAD !";
     userPass = "HEAD";
     userId = "HEAD";
     userNext = NULL;
@@ -33,11 +36,6 @@ client::client(client *head, string userName, string userId, string userPass) {
     this->userPass = userPass;
     this->userNext = NULL;
     head->changeUserNext(this);
-    printSeparator(printConst);
-    cout << "   Signup Successful!" << endl;
-    printSeparator(printConst);
-    cout << endl;
-    this->print();
 }
 
 client::~client() {
@@ -45,14 +43,9 @@ client::~client() {
         delete this->userNext;
     }
     this->print();
-    cout << "deleted!" << endl;
-}
-
-client* client::getLast() {
-    if (this->userNext != NULL) {
-        return (*this).userNext->getLast();
-    }
-    return this;
+    cout << endl;
+    cout << "deleted!";
+    cout << endl;
 }
 
 int client::changeUserNext(client *userNext) {
@@ -80,7 +73,6 @@ void client::print() {
     cout << endl;
     cout << "Password: " << userPass;
     cout << endl;
-    cout << endl;
 }
 
 client* client::getClinet(string name, string pass) {
@@ -95,4 +87,35 @@ client* client::getClinet(string name, string pass) {
 
 string client::getName() {
     return this->userName;
+}
+
+// ==================================================================
+// ==================================================================
+// ==================================================================
+
+class student : public client {
+    private: 
+        string userStudyField;
+    public:
+        student(client*, string, string, string, string);
+        virtual ~student();
+        virtual void print();
+};
+
+student::student(client *head, string userName, string userId, string userPass, string userStudyField) : client(head, userName, userId, userPass){
+    this->userStudyField = userStudyField;
+}
+
+student::~student() {
+}
+
+void student::print() {
+    cout << "Usename: " << this->userName;
+    cout << endl;
+    cout << "Field of study: " << this->userStudyField;
+    cout << endl;
+    cout << "User ID: " << this->userId;
+    cout << endl;
+    cout << "Password: " << this->userPass;
+    cout << endl;
 }

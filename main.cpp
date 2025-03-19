@@ -1,89 +1,79 @@
 #include <bits/stdc++.h>
-#include "client.h"
+#include "input.h"
 
 using namespace std;
 
 int SignUpFunc(client *head) {
     // =========== variable 
     int inp;
+    client *newUser;
     string userName;
     string userId;
     string userPass;
+    string userStudyField;
     // ==================== 
     printSeparator(printConst);
     cout << "   Signup page";
     cout << endl;
     cout << endl;
-    cout << "1. Create new account";
+    cout << "1. Sign up as a Student";
     cout << endl;
-    cout << "2. Return to main menu";
+    cout << "2. Sign up as a Teacher";
     cout << endl;
-    cout << "3. Exit Programm";
+    cout << "3. Return to main menu";
+    cout << endl;
+    cout << "4. Exit Programm";
     cout << endl;
     cout << endl;
     printSeparator(lowPrintConst);
-    inp = getChoises(3);
+    inp = getChoises(4);
     if (inp == 1) {
-        do {
-            cout << endl;
-            cout << "**for return to main menu, type in \\MENU\\ with \\ included**";
-            cout << endl;
-            cout << "Enter your desired username (no spaces or \\ allowed): ";
-            getline(cin, userName);
-            if (userName == "\\MENU\\") {
-                return 1;
-            }
-            if (containSpaceSlash(userName)) {
-                cout << "Error: Username cannot contain spaces or \\. Please try again.";
-                cout << endl;
-                cout << endl;
-            }
-        } while (containSpaceSlash(userName));
-        do {
-            cout << endl;
-            cout << "**for return to main menu, type in \\MENU\\ with \\ included**";
-            cout << endl;
-            cout << "Enter your desired user ID (numbers only): ";
-            getline(cin, userId);
-            if (userId == "\\MENU\\") {
-                return 1;
-            }
-            if (containNumber(userId) == 1 || head->checkUserId(userId) == 0) {
-                if (head->checkUserId(userId) == 0) {
-                    cout << "Error: ID has been taken. Please try again.";
-                    cout << endl;
-                    cout << endl;
-                }
-                else {
-                    cout << "Error: User ID must be a number. Please try again.";
-                    cout << endl;
-                    cout << endl;
-                }
-            }
-        } while (containNumber(userId) == 1 || head->checkUserId(userId) == 0);
-        do {
-            cout << endl;
-            cout << "**for return to main menu, type in \\MENU\\ with \\ included**";
-            cout << endl;
-            cout << "Enter your desired password (no spaces or \\ allowed): ";
-            getline(cin, userPass);
-            if (userPass == "\\MENU\\") {
-                return 1;
-            }
-            if (containSpaceSlash(userPass)) {
-                cout << "Error: Password cannot contain spaces or \\. Please try again.";
-                cout << endl;
-                cout << endl;
-            }
-        } while (containSpaceSlash(userPass));
-        client *newUser = new client(head, userName, userId, userPass);
+        userName = getUserName();
+        if (userName == "\\MENU\\") {
+            return 1;
+        }
+        userStudyField = getUserStudyField();
+        if (userStudyField == "\\MENU\\") {
+            return 1;
+        }
+        userId = getUserId(head);
+        if (userId == "\\MENU\\") {
+            return 1;
+        }
+        userPass = getUserPass();
+        if (userPass == "\\MENU\\") {
+            return 1;
+        }
+        newUser = new student(head, userName, userId, userPass, userStudyField); 
+    }
+    if (inp == 2) {
+        userName = getUserName();
+        if (userName == "\\MENU\\") {
+            return 1;
+        }
+        userId = getUserId(head);
+        if (userId == "\\MENU\\") {
+            return 1;
+        }
+        userPass = getUserPass();
+        if (userPass == "\\MENU\\") {
+            return 1;
+        }
+        newUser = new client(head, userName, userId, userPass);
+    }
+    if (inp == 1 || inp == 2) {
         cout << "Thank you for signing up! You can now login with your credentials.";
         cout << endl;
         printSeparator(printConst);
         cout << endl;
+        printSeparator(printConst);
+        cout << "   Signup Successful!" << endl;
+        printSeparator(printConst);
+        cout << endl;
+        newUser->print();
         return 1;
     }
-    else if (inp == 2) {
+    else if (inp == 3) {
         return 1;
     }
     else {
@@ -129,12 +119,11 @@ int loginFunc(client *head) {
                 return 1;
             }
             user = head->getClinet(userName, userPass);
-            if (user != NULL) {
-                break;
+            if (user == NULL) {
+                cout << endl;
+                cout << "Error: Invalid username or password. Please try again.";
+                cout << endl;
             }
-            cout << endl;
-            cout << "Error: Invalid username or password. Please try again.";
-            cout << endl;
         } while (user == NULL);
         cout << endl;
         printSeparator(printConst);
@@ -154,7 +143,6 @@ int loginFunc(client *head) {
         return 0;
     }
 }
-
 
 int welcomeFunc(client *head) {
     // =========== variable 

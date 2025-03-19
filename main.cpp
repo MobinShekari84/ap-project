@@ -5,28 +5,35 @@ class client {
     private:
         string userName;
         string userId;
-        string userPassword;
+        string userPass;
         client *userNext;
     public:
-        client(int);
         client();
+        client(client*);
         client* getLast();
         int changeUserNext(client*);
+        int checkUserId(string);
+        void print();
 };
 
-client::client(int code) {
+client::client() {
     userName = "HEAD";
+    userPass = "HEAD";
+    userId = "HEAD";
     userNext = NULL;
 }
 
-client::client() {
+client::client(client *head) {
     cout << "Username: " << endl;
     cin >> userName;
-    cout << endl << "User ID: " << endl;
+    cout << "User ID: " << endl;
     cin >> userId;
-    cout << endl << "User Password" << endl;
-    cin >> userPassword;
-    cout << endl;
+    while(head->checkUserId(userId) == 0) {
+        cout << "ID has been taken, try again! " << endl << "User ID: " << endl;
+        cin >> userId;
+    }
+    cout << "User Password" << endl;
+    cin >> userPass;
     userNext = NULL;
 }
 
@@ -45,8 +52,22 @@ int client::changeUserNext(client *userNext) {
     return 1;
 }
 
+int client::checkUserId(string id) {
+    if (this->userId == id) {
+        return 0;
+    }
+    if (this->userNext != NULL) {
+        return this->userNext->checkUserId(id);
+    }
+    return 1;
+}
+
+void client::print() {
+    cout << userName << ' ' << userId << ' ' << userPass << endl;
+}
+
 int main() {
-    client *head = new client(0);
+    client *head = new client;
     do {
         cout << "signUp: " << endl;
         int x;
@@ -54,7 +75,7 @@ int main() {
         if (x == -1) {
             break;
         }
-        client *newUser = new client;
+        client *newUser = new client(head);
         head->getLast()->changeUserNext(newUser);
     } while (true);
 }

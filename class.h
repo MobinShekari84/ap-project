@@ -19,6 +19,7 @@ class client {
         void changeUserNext(client*);
         int checkUserId(string);
         string getName();
+        int isNameTaken(string);
         virtual void print();
         client *getClinet(string, string);
 };
@@ -65,6 +66,16 @@ int client::checkUserId(string id) {
         return this->userNext->checkUserId(id);
     }
     return 1;
+}
+
+int client::isNameTaken(string userName) {
+    if (this->userName == userName) {
+        return 1;
+    }
+    if (this->userNext != NULL) {
+        return this->userNext->isNameTaken(userName);
+    }
+    return 0;
 }
 
 void client::print() {

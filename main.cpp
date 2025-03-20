@@ -29,7 +29,7 @@ int SignUpFunc(client *head) {
     printSeparator(lowPrintConst);
     inp = getChoises(4);
     if (inp == 1) {
-        userName = getUserName();
+        userName = getUserName(head);
         if (userName == "\\MENU\\") {
             return 1;
         }
@@ -48,7 +48,7 @@ int SignUpFunc(client *head) {
         newUser = new student(head, userName, userId, userPass, userStudyField); 
     }
     if (inp == 2) {
-        userName = getUserName();
+        userName = getUserName(head);
         if (userName == "\\MENU\\") {
             return 1;
         }

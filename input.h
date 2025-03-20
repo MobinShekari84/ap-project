@@ -2,7 +2,7 @@
 #include "class.h"
 using namespace std;
 
-string getUserName() {
+string getUserName(client *head) {
     string userName;
     do {
         cout << endl;
@@ -18,7 +18,12 @@ string getUserName() {
             cout << endl;
             cout << endl;
         }
-    } while (containSpaceSlash(userName));
+        else if (head->isNameTaken(userName)) {
+            cout << "Error: Username is taken. Please try new username.";
+            cout << endl;
+            cout << endl;
+        }
+    } while (containSpaceSlash(userName) || head->isNameTaken(userName));
     return userName;
 }
 

@@ -7,6 +7,7 @@ int SignUpFunc(client *head) {
     // =========== variable 
     int inp;
     client *newUser;
+    linkedListString *userCourse;
     string userName;
     string userId;
     string userPass;
@@ -51,6 +52,10 @@ int SignUpFunc(client *head) {
         if (userName == "\\MENU\\") {
             return 1;
         }
+        userCourse = getUserCourse();
+        if (userCourse == NULL) {
+            return 1;
+        }
         userId = getUserId(head);
         if (userId == "\\MENU\\") {
             return 1;
@@ -59,7 +64,7 @@ int SignUpFunc(client *head) {
         if (userPass == "\\MENU\\") {
             return 1;
         }
-        newUser = new client(head, userName, userId, userPass);
+        newUser = new teacher(head, userName, userId, userPass, userCourse);
     }
     if (inp == 1 || inp == 2) {
         cout << "Thank you for signing up! You can now login with your credentials.";
@@ -132,6 +137,7 @@ int loginFunc(client *head) {
         cout << endl;
         printSeparator(printConst);
         cout << "Welcome back, " << user->getName() << '!' << endl;
+        user->print();
         printSeparator(printConst);
         cout << endl;
         return 1;

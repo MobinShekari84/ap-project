@@ -16,7 +16,7 @@ class client {
         client();
         client(client*, string, string, string);
         virtual ~client();
-        int changeUserNext(client*);
+        void changeUserNext(client*);
         int checkUserId(string);
         string getName();
         virtual void print();
@@ -48,12 +48,13 @@ client::~client() {
     cout << endl;
 }
 
-int client::changeUserNext(client *userNext) {
+void client::changeUserNext(client *userNext) {
     if (this->userNext != NULL) {
-        return -1;
+        this->userNext->changeUserNext(userNext);
     }
-    this->userNext = userNext;
-    return 1;
+    else {
+        this->userNext = userNext;
+    }
 }
 
 int client::checkUserId(string id) {
@@ -71,7 +72,10 @@ void client::print() {
     cout << endl;
     cout << "User ID: " << userId;
     cout << endl;
-    cout << "Password: " << userPass;
+    cout << "Password: ";
+    for (int i = 0; i < userPass.size(); i++) {
+        cout << "*";
+    }
     cout << endl;
 }
 
@@ -116,6 +120,100 @@ void student::print() {
     cout << endl;
     cout << "User ID: " << this->userId;
     cout << endl;
-    cout << "Password: " << this->userPass;
+    cout << "Password: ";
+    for (int i = 0; i < userPass.size(); i++) {
+        cout << "*";
+    }
+    cout << endl;
+}
+
+// ==================================================================
+// ==================================================================
+// ==================================================================
+
+class linkedListString {
+    private:
+        string str;
+        linkedListString *nextString;
+    public:
+        linkedListString();
+        linkedListString(linkedListString *, string);
+        void changeNextString(linkedListString *);
+        ~linkedListString();
+        void print();
+};
+
+linkedListString::linkedListString() {
+    this->str = "HEAD !";
+    this->nextString = NULL;
+}
+
+linkedListString::linkedListString(linkedListString *head, string str) {
+    this->str = str;
+    head->changeNextString(this);
+}
+
+linkedListString::~linkedListString() {
+    if (this->nextString != NULL) {
+        delete this->nextString;
+    }
+}
+
+void linkedListString::changeNextString(linkedListString *nextString) {
+    if (this->nextString != NULL) {
+        this->nextString->changeNextString(nextString);
+    }
+    else {
+        this->nextString = nextString;
+    }
+}
+
+void linkedListString::print() {
+    if (this->str == "HEAD !") {
+        cout << "Courses: ";
+    }
+    else {
+        cout << this->str;
+        cout << " ";
+    }
+    if (this->nextString != NULL) {
+        this->nextString->print();
+    }
+}
+
+// ==================================================================
+// ==================================================================
+// ==================================================================
+
+class teacher : public client {
+    private:
+        linkedListString *userCourse;
+    public:
+        teacher(client*, string, string, string, linkedListString*);
+        virtual ~teacher();
+        virtual void print();
+};
+
+teacher::teacher(client *head, string userName, string userId, string userPass, linkedListString *userCourse) : client(head, userName, userId, userPass) {
+    this->userCourse = userCourse;
+}
+
+teacher::~teacher() {
+    if (this->userCourse != NULL) {
+        delete this->userCourse;
+    }
+}
+
+void teacher::print() {
+    cout << "Usename: " << this->userName;
+    cout << endl;
+    userCourse->print();
+    cout << endl;
+    cout << "User ID: " << this->userId;
+    cout << endl;
+    cout << "Password: ";
+    for (int i = 0; i < userPass.size(); i++) {
+        cout << "*";
+    }
     cout << endl;
 }

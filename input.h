@@ -88,3 +88,28 @@ string getUserStudyField() {
     } while (containSpaceSlash(userStudyField));
     return userStudyField;
 }
+
+linkedListString* getUserCourse() {
+    linkedListString *userCourse = new linkedListString;
+    linkedListString *course;
+    string inp;
+    do {
+        cout << endl;
+        cout << "**for return to main menu, type in \\MENU\\ with \\ included**";
+        cout << endl;
+        cout << "Enter a course name (or type 'done' to finish) (no spaces or \\ allowed): ";
+        getline(cin, inp);
+        if (inp == "\\MENU\\") {
+            return NULL;
+        }
+        if (containSpaceSlash(inp)) {
+            cout << "Error: Course name cannot contain spaces or \\. Please try again.";
+            cout << endl;
+            cout << endl;
+        }
+        else if (inp != "done") {
+            course = new linkedListString(userCourse, inp);
+        }
+    } while (inp != "done");
+    return userCourse;
+}

@@ -16,7 +16,8 @@ class linkedListString {
         linkedListString(linkedListString *, string);
         void changeNextString(linkedListString *);
         ~linkedListString();
-        virtual void print();
+        void print();
+        void print(int);
 };
 
 linkedListString::linkedListString() {
@@ -55,6 +56,113 @@ void linkedListString::print() {
         this->nextString->print();
     }
 }
+
+void linkedListString::print(int ind) {
+    if (this->ind == ind) {
+        cout << this->str;
+        cout << endl;
+    }
+    else if (this->ind < ind) {
+        this->nextString->print(ind);
+    }
+    else {
+        cout << "Error: there is no " << ind << " string.";
+        cout << endl;
+    }
+}
+
+// ==================================================================
+// ==================================================================
+// ==================================================================
+
+class examList {
+    private:
+        string examName;
+        int examCode;
+        int examQuestionNumber;
+        linkedListString *examQuestion;
+        linkedListString *examAnswer;
+        examList *nextExam;
+    public:
+        examList();
+        examList(examList *, string, int, linkedListString *, linkedListString *, int);
+        ~examList();
+        void print();
+        void changeNextExam(examList *);
+};
+
+examList::examList() {
+    examName = "\\HEAD\\";
+    examCode = -1;
+    examQuestionNumber = 0;
+    nextExam = NULL;
+}
+
+examList::examList(examList *head, string examName, int examCode, linkedListString *examQuestion, linkedListString *examAnswer, int examQuestionNumber) {
+    this->examName = examName;
+    this->examCode = examCode;
+    this->examQuestion = examQuestion;
+    this->examAnswer = examAnswer;
+    this->examQuestionNumber = examQuestionNumber;
+    nextExam = NULL;
+    head->changeNextExam(this);
+}
+
+examList::~examList() {
+    if (this->nextExam != NULL) {
+        delete this->nextExam;
+    }
+    delete this->examQuestion;
+    delete this->examAnswer;
+}
+
+void examList::print() {
+    if (examName == "\\HEAD\\") {
+        printSeparator(lowPrintConst);
+        cout << "Exam list: ";
+        cout << endl;
+        cout << endl;
+    }
+    if (examName != "\\HEAD\\") {
+        cout << endl;
+        cout << "Exam name: " << examName << " - Exam code: " << examCode << " - Number of questions: " << examQuestionNumber;
+        cout << endl;
+        cout << endl;
+        printSeparator(lowPrintConst);
+        for (int i = 1; i <= examQuestionNumber; i++) {
+            cout << "Question number " << i << ": ";
+            examQuestion->print(i);
+            cout << endl;
+            cout << "Answer: ";
+            examAnswer->print(i);
+            cout << endl;
+            cout << endl;
+            printSeparator(lowPrintConst);
+        }
+        cout << endl;
+        printSeparator(printConst);
+    }
+    if (this->nextExam != NULL) {
+        this->nextExam->print();
+    }
+    if (examName == "\\HEAD\\") {
+        cout << endl;
+        cout << "End of list.";
+        cout << endl;
+        printSeparator(lowPrintConst);
+    }
+}
+
+void examList::changeNextExam(examList *nextExam) {
+    if (this->nextExam != NULL) {
+        this->nextExam->changeNextExam(nextExam);
+    }
+    else {
+        this->nextExam = nextExam;
+    }
+}
+
+
 
 // ==================================================================
 // ==================================================================
@@ -204,85 +312,6 @@ void student::print() {
         cout << "*";
     }
     cout << endl;
-}
-
-
-// ==================================================================
-// ==================================================================
-// ==================================================================
-
-class examList {
-    private:
-        string examName;
-        int examCode;
-        int examQuestionNumber;
-        linkedListString *examQuestion;
-        linkedListString *examAnswer;
-        examList *nextExam;
-    public:
-        examList();
-        examList(examList *, string, int, linkedListString *, linkedListString *, int);
-        ~examList();
-        void print();
-        void changeNextExam(examList *);
-};
-
-examList::examList() {
-    examName = "\\HEAD\\";
-    examCode = -1;
-    examQuestionNumber = 0;
-    nextExam = NULL;
-}
-
-examList::examList(examList *head, string examName, int examCode, linkedListString *examQuestion, linkedListString *examAnswer, int examQuestionNumber) {
-    this->examName = examName;
-    this->examCode = examCode;
-    this->examQuestion = examQuestion;
-    this->examAnswer = examAnswer;
-    this->examQuestionNumber = examQuestionNumber;
-    nextExam = NULL;
-    head->changeNextExam(this);
-}
-
-examList::~examList() {
-    if (this->nextExam != NULL) {
-        delete this->nextExam;
-    }
-    delete this->examQuestion;
-    delete this->examAnswer;
-}
-
-void examList::print() {
-    if (examName == "\\HEAD\\") {
-        printSeparator(lowPrintConst);
-        cout << "Exam list: ";
-        cout << endl;
-        cout << endl;
-    }
-    if (examName != "\\HEAD\\") {
-        cout << "Exam name: " << examName << " - Exam code: " << examCode << " - Number of questions: " << examQuestionNumber;
-        examQuestion->print();
-        examAnswer->print();
-        cout << endl;
-    }
-    if (this->nextExam != NULL) {
-        this->nextExam->print();
-    }
-    if (examName == "\\HEAD\\") {
-        cout << endl;
-        cout << "End of list.";
-        cout << endl;
-        printSeparator(lowPrintConst);
-    }
-}
-
-void examList::changeNextExam(examList *nextExam) {
-    if (this->nextExam != NULL) {
-        this->nextExam->changeNextExam(nextExam);
-    }
-    else {
-        this->nextExam = nextExam;
-    }
 }
 
 // ==================================================================

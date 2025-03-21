@@ -12,6 +12,7 @@ class client {
         string userId;
         string userPass;
         client *userNext;
+        int userTeacher;
     public:
         client();
         client(client*, string, string, string);
@@ -22,13 +23,15 @@ class client {
         int isNameTaken(string);
         virtual void print();
         client *getClinet(string, string);
+        int isTeacher();
 };
 
 client::client() {
-    userName = "HEAD !";
-    userPass = "HEAD";
-    userId = "HEAD";
+    userName = "\\HEAD\\";
+    userPass = "\\HEAD\\";
+    userId = "\\HEAD\\";
     userNext = NULL;
+    userTeacher = -1;
 }
 
 client::client(client *head, string userName, string userId, string userPass) {
@@ -104,6 +107,10 @@ string client::getName() {
     return this->userName;
 }
 
+int client::isTeacher() {
+    return userTeacher;
+}
+
 // ==================================================================
 // ==================================================================
 // ==================================================================
@@ -119,6 +126,7 @@ class student : public client {
 
 student::student(client *head, string userName, string userId, string userPass, string userStudyField) : client(head, userName, userId, userPass){
     this->userStudyField = userStudyField;
+    userTeacher = 0;
 }
 
 student::~student() {
@@ -145,6 +153,7 @@ void student::print() {
 class linkedListString {
     private:
         string str;
+        int ind;
         linkedListString *nextString;
     public:
         linkedListString();
@@ -155,7 +164,8 @@ class linkedListString {
 };
 
 linkedListString::linkedListString() {
-    this->str = "HEAD !";
+    this->str = "\\HEAD\\";
+    this->ind = 0;
     this->nextString = NULL;
 }
 
@@ -176,11 +186,12 @@ void linkedListString::changeNextString(linkedListString *nextString) {
     }
     else {
         this->nextString = nextString;
+        nextString->ind = this->ind + 1;
     }
 }
 
 void linkedListString::print() {
-    if (this->str == "HEAD !") {
+    if (this->str == "\\HEAD\\") {
         cout << "Courses: ";
     }
     else {
@@ -196,9 +207,87 @@ void linkedListString::print() {
 // ==================================================================
 // ==================================================================
 
+class examList {
+    private:
+        string examName;
+        int examCode;
+        int examQuestionNumber;
+        linkedListString *examQuestion;
+        linkedListString *examAnswer;
+        examList *nextExam;
+    public:
+        examList();
+        examList(examList *, string, int, linkedListString *, linkedListString *, int);
+        ~examList();
+        void print();
+        void changeNextExam(examList *);
+};
+
+examList::examList() {
+    examName = "\\HEAD\\";
+    examCode = -1;
+    examQuestionNumber = 0;
+    nextExam = NULL;
+}
+
+examList::examList(examList *head, string examName, int examCode, linkedListString *examQuestion, linkedListString *examAnswer, int examQuestionNumber) {
+    this->examName = examName;
+    this->examCode = examCode;
+    this->examQuestion = examQuestion;
+    this->examAnswer = examAnswer;
+    this->examQuestionNumber = examQuestionNumber;
+    nextExam = NULL;
+    head->changeNextExam(this);
+}
+
+examList::~examList() {
+    if (this->nextExam != NULL) {
+        delete this->nextExam;
+    }
+    delete this->examQuestion;
+    delete this->examAnswer;
+}
+
+void examList::print() {
+    if (examName == "\\HEAD\\") {
+        printSeparator(lowPrintConst);
+        cout << "Exam list: ";
+        cout << endl;
+        cout << endl;
+    }
+    if (examName != "\\HEAD\\") {
+        cout << "Exam name: " << examName << " - Exam code: " << examCode << " - Number of questions: " << examQuestionNumber;
+        cout << endl;
+    }
+    if (this->nextExam != NULL) {
+        this->nextExam->print();
+    }
+    if (examName == "\\HEAD\\") {
+        cout << endl;
+        cout << "End of list.";
+        cout << endl;
+        printSeparator(lowPrintConst);
+    }
+}
+
+void examList::changeNextExam(examList *nextExam) {
+    if (this->nextExam != NULL) {
+        this->nextExam->changeNextExam(nextExam);
+    }
+    else {
+        this->nextExam = nextExam;
+    }
+}
+
+// ==================================================================
+// ==================================================================
+// ==================================================================
+
+
 class teacher : public client {
     private:
         linkedListString *userCourse;
+        examList *userExam;
     public:
         teacher(client*, string, string, string, linkedListString*);
         virtual ~teacher();
@@ -207,11 +296,14 @@ class teacher : public client {
 
 teacher::teacher(client *head, string userName, string userId, string userPass, linkedListString *userCourse) : client(head, userName, userId, userPass) {
     this->userCourse = userCourse;
+    this->userExam = new examList;
+    userTeacher = 1;
 }
 
 teacher::~teacher() {
     if (this->userCourse != NULL) {
         delete this->userCourse;
+        delete userExam;
     }
 }
 
@@ -226,5 +318,7 @@ void teacher::print() {
     for (int i = 0; i < userPass.size(); i++) {
         cout << "*";
     }
+    cout << endl;
+    this->userExam->print();
     cout << endl;
 }

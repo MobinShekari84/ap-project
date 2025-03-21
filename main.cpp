@@ -3,6 +3,50 @@
 
 using namespace std;
 
+int teacherFunc(client *user) {
+    string examName;
+    int examCode;
+    int inp;
+    cout << "   Teacher's Page";
+    cout << endl;
+    cout << endl;
+    cout << "1. Create exam";
+    cout << endl;
+    cout << "2. View exams";
+    cout << endl;
+    cout << "3. Return to main menu";
+    cout << endl;
+    cout << "4. Exit Programm";
+    cout << endl;
+    cout << endl;
+    printSeparator(lowPrintConst);
+    inp = getChoises(4);
+    if (inp == 1) {
+        printSeparator(printConst);
+        cout << endl;
+        cout << "   Create exam";
+        cout << endl;
+        cout << endl;
+        cout << "Enter the exam name: ";
+        getline(cin, examName);
+        cout << endl;
+        examCode = rand();
+        cout << "Exam \\" << examName << "\\ created with code \\" << examCode << "\\ successfully.";
+        cout << endl;
+        printSeparator(printConst);
+        return 2;
+    }
+    else if (inp == 2) {
+        return 2;
+    }
+    else if (inp == 3) {
+        return 1;
+    }
+    else {
+        return 0;
+    }
+}
+
 int SignUpFunc(client *head) {
     // =========== variable 
     int inp;
@@ -140,7 +184,12 @@ int loginFunc(client *head) {
         user->print();
         printSeparator(printConst);
         cout << endl;
-        return 1;
+        if (user->isTeacher()) {
+            do {
+                inp = teacherFunc(user);
+            } while (inp == 2);
+        }
+        return inp;
     }
     else if (inp == 2) {
         return 1;
@@ -188,6 +237,7 @@ int welcomeFunc(client *head) {
 }
 
 int main() {
+    srand(time(0));
     client *head = new client;
     while (welcomeFunc(head)) {
         continue;

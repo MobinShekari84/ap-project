@@ -47,10 +47,12 @@ int teacherFunc(client *user) {
             cout << endl;
             cout << "2. Remove question";
             cout << endl;
-            cout << "3. Save and quit";
+            cout << "3. View exam";
+            cout << endl;
+            cout << "4. Save and quit";
             cout << endl;
             cout << endl;
-            inp = getChoises(3);
+            inp = getChoises(4);
             if (inp == 1) {
                 printSeparator(lowPrintConst);
                 cout << "   Add question";
@@ -58,9 +60,15 @@ int teacherFunc(client *user) {
                 cout << endl;
                 cout << "Enter the question text: ";
                 getline(cin, question);
-                cout << endl;
-                cout << "Enter the answer: ";
-                getline(cin, answer);
+                do {
+                    cout << endl;
+                    cout << "Enter the answer (should be a number): ";
+                    getline(cin, answer);
+                    if (containNumber(answer) == 1) {
+                        cout << "Error: Answer is not a number. Please try again.";
+                        cout << endl;
+                    }
+                } while(containNumber(answer) == 1);
                 new linkedListString(examQuestions, question);
                 new linkedListString(examAnswers, answer);
                 cout << endl;
@@ -76,13 +84,35 @@ int teacherFunc(client *user) {
                 cout << "Enter the index of question to remove: ";
                 ind = getChoises(questionNumber);
                 cout << endl;
+                delete (examQuestions->deleteInd(ind));
+                delete (examAnswers->deleteInd(ind));
+                questionNumber--;
                 printSeparator(lowPrintConst);
             }
-        } while (inp != 3);
+            else if (inp == 3) {
+                cout << endl;
+                cout << "Exam name: " << examName << " - Exam code: " << examCode << " - Number of questions: " << questionNumber;
+                cout << endl;
+                cout << endl;
+                printSeparator(lowPrintConst);
+                for (int i = 1; i <= questionNumber; i++) {
+                    cout << "Question number " << i << ": ";
+                    examQuestions->print(i);
+                    cout << endl;
+                    cout << "Answer: ";
+                    examAnswers->print(i);
+                    cout << endl;
+                    cout << endl;
+                    printSeparator(lowPrintConst);
+                }
+                cout << endl;
+            }
+        } while (inp != 4);
         user->addExam(examName, examCode, examQuestions, examAnswers, questionNumber);
         return 2;
     }
     else if (inp == 2) {
+        user->showExams();
         return 2;
     }
     else if (inp == 3) {

@@ -7,7 +7,7 @@ using namespace std;
 // ==================================================================
 
 class linkedListString {
-    private:
+    protected:
         string str;
         int ind;
         linkedListString *nextString;
@@ -18,6 +18,8 @@ class linkedListString {
         ~linkedListString();
         void print();
         void print(int);
+        linkedListString* deleteInd(int);
+        void addToInd(int);
 };
 
 linkedListString::linkedListString() {
@@ -71,6 +73,32 @@ void linkedListString::print(int ind) {
     }
 }
 
+linkedListString* linkedListString::deleteInd(int ind) {
+    linkedListString *question;
+    if (this->ind == ind) {
+        if (this->nextString != NULL) {
+            this->nextString->addToInd(-1);
+        }
+        return this;
+    }
+    else if ((this->ind + 1) == ind) {
+        question = this->nextString->deleteInd(ind);
+        this->nextString = this->nextString->nextString;
+        question->nextString = NULL;
+    }
+    else {
+        question = this->nextString->deleteInd(ind);
+    }
+    return question;
+}
+
+void linkedListString::addToInd(int k) {
+    this->ind += k;
+    if (this->nextString != NULL) {
+        this->nextString->addToInd(k);
+    }
+}
+
 // ==================================================================
 // ==================================================================
 // ==================================================================
@@ -89,6 +117,7 @@ class examList {
         ~examList();
         void print();
         void changeNextExam(examList *);
+        void showExams();
 };
 
 examList::examList() {
@@ -162,7 +191,21 @@ void examList::changeNextExam(examList *nextExam) {
     }
 }
 
-
+void examList::showExams() {
+    if (examName == "\\HEAD\\") {
+        cout << "Exam codes: ";
+    }
+    else {
+        cout << examCode << " - ";
+    }
+    if (this->nextExam != NULL) {
+        this->nextExam->showExams();
+    }
+    if (examName == "\\HEAD\\") {
+        cout << endl;
+        printSeparator(lowPrintConst);
+    }
+}
 
 // ==================================================================
 // ==================================================================
@@ -187,7 +230,7 @@ class client {
         client *getClinet(string, string);
         int isTeacher();
         virtual void addExam(string, int, linkedListString *, linkedListString *, int);
-
+        virtual void showExams();
 };
 
 client::client() {
@@ -279,6 +322,12 @@ void client::addExam(string examName, int examCode, linkedListString *examQuesti
     cout << "Error: user is not teacher.";
     cout << endl;
 }
+
+void client::showExams() {
+    cout << "Error: user is not teacher.";
+    cout << endl;
+}
+
 // ==================================================================
 // ==================================================================
 // ==================================================================
@@ -328,6 +377,7 @@ class teacher : public client {
         virtual ~teacher();
         virtual void print();
         virtual void addExam(string, int, linkedListString *, linkedListString *, int);
+        virtual void showExams();
 };
 
 teacher::teacher(client *head, string userName, string userId, string userPass, linkedListString *userCourse) : client(head, userName, userId, userPass) {
@@ -362,4 +412,8 @@ void teacher::print() {
 void teacher::addExam(string examName, int examCode, linkedListString *examQuestion, linkedListString *examAnswer, int questionNumber) {
     examList *newExam = new examList(this->userExam, examName, examCode, examQuestion, examAnswer, questionNumber);
     newExam->print();
+}
+
+void teacher::showExams() {
+    userExam->showExams();
 }

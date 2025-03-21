@@ -5,8 +5,12 @@ using namespace std;
 
 int teacherFunc(client *user) {
     string examName;
+    string question;
+    string answer;
     int examCode;
     int inp;
+    int questionNumber;
+    int ind;
     cout << "   Teacher's Page";
     cout << endl;
     cout << endl;
@@ -34,6 +38,48 @@ int teacherFunc(client *user) {
         cout << "Exam \\" << examName << "\\ created with code \\" << examCode << "\\ successfully.";
         cout << endl;
         printSeparator(printConst);
+        questionNumber = 0;
+        linkedListString *examQuestions = new linkedListString;
+        linkedListString *examAnswers = new linkedListString;
+        do {
+            cout << endl;
+            cout << "1. Add question";
+            cout << endl;
+            cout << "2. Remove question";
+            cout << endl;
+            cout << "3. Save and quit";
+            cout << endl;
+            cout << endl;
+            inp = getChoises(3);
+            if (inp == 1) {
+                printSeparator(lowPrintConst);
+                cout << "   Add question";
+                cout << endl;
+                cout << endl;
+                cout << "Enter the question text: ";
+                getline(cin, question);
+                cout << endl;
+                cout << "Enter the answer: ";
+                getline(cin, answer);
+                new linkedListString(examQuestions, question);
+                new linkedListString(examAnswers, answer);
+                cout << endl;
+                cout << endl;
+                printSeparator(lowPrintConst);
+                questionNumber++;
+            }
+            else if (inp == 2) {
+                printSeparator(lowPrintConst);
+                cout << "   Remove question";
+                cout << endl;
+                cout << endl;
+                cout << "Enter the index of question to remove: ";
+                ind = getChoises(questionNumber);
+                cout << endl;
+                printSeparator(lowPrintConst);
+            }
+        } while (inp != 3);
+        user->addExam(examName, examCode, examQuestions, examAnswers, questionNumber);
         return 2;
     }
     else if (inp == 2) {

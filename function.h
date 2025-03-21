@@ -32,7 +32,11 @@ int getChoises(int k) {
             }
         }
         if (flag == 0) {
-            cout << "Error: Invalid choice! Please enter 1 or 2 or 3 only.";
+            cout << "Error: Invalid choice! Please enter ";
+            for (int i = 1; i < k; i++) {
+                cout << i << " or ";
+            }
+            cout << k << " only.";
             cout << endl;
         }
     } while (!flag);

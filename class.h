@@ -115,9 +115,10 @@ class examList {
         examList();
         examList(examList *, string, int, linkedListString *, linkedListString *, int);
         ~examList();
-        void print();
+        void print(int onlyOne);
         void changeNextExam(examList *);
         void showExams();
+        examList* searchExamCode(string);
 };
 
 examList::examList() {
@@ -145,7 +146,7 @@ examList::~examList() {
     delete this->examAnswer;
 }
 
-void examList::print() {
+void examList::print(int onlyOne = 0) {
     if (examName == "\\HEAD\\") {
         printSeparator(lowPrintConst);
         cout << "Exam list: ";
@@ -171,7 +172,7 @@ void examList::print() {
         cout << endl;
         printSeparator(printConst);
     }
-    if (this->nextExam != NULL) {
+    if (this->nextExam != NULL && onlyOne == 0) {
         this->nextExam->print();
     }
     if (examName == "\\HEAD\\") {
@@ -193,6 +194,7 @@ void examList::changeNextExam(examList *nextExam) {
 
 void examList::showExams() {
     if (examName == "\\HEAD\\") {
+        cout << endl;
         cout << "Exam codes: ";
     }
     else {
@@ -205,6 +207,24 @@ void examList::showExams() {
         cout << endl;
         printSeparator(lowPrintConst);
     }
+}
+
+examList* examList::searchExamCode(string inpCode) {
+    string examCodeString = "";
+    {
+        int x = examCode;
+        while (x > 0) {
+            examCodeString = (char) (x % 10 + '0') + examCodeString;
+            x /= 10;
+        }
+    }
+    if (inpCode == examCodeString) {
+        return this;
+    }
+    else if (nextExam != NULL) {
+        return nextExam->searchExamCode(inpCode);
+    }
+    return NULL;
 }
 
 // ==================================================================
@@ -231,6 +251,7 @@ class client {
         int isTeacher();
         virtual void addExam(string, int, linkedListString *, linkedListString *, int);
         virtual void showExams();
+        virtual examList* searchExamCode(string);
 };
 
 client::client() {
@@ -328,6 +349,12 @@ void client::showExams() {
     cout << endl;
 }
 
+examList* client::searchExamCode(string inpCode) {
+    cout << "Error: user is not teacher.";
+    cout << endl;
+    return NULL;
+}
+
 // ==================================================================
 // ==================================================================
 // ==================================================================
@@ -378,6 +405,7 @@ class teacher : public client {
         virtual void print();
         virtual void addExam(string, int, linkedListString *, linkedListString *, int);
         virtual void showExams();
+        virtual examList* searchExamCode(string);
 };
 
 teacher::teacher(client *head, string userName, string userId, string userPass, linkedListString *userCourse) : client(head, userName, userId, userPass) {
@@ -404,8 +432,8 @@ void teacher::print() {
     for (int i = 0; i < userPass.size(); i++) {
         cout << "*";
     }
-    cout << endl;
-    this->userExam->print();
+    //cout << endl;
+    //this->userExam->print();
     cout << endl;
 }
 
@@ -416,4 +444,8 @@ void teacher::addExam(string examName, int examCode, linkedListString *examQuest
 
 void teacher::showExams() {
     userExam->showExams();
+}
+
+examList* teacher::searchExamCode(string inpCode) {
+    return userExam->searchExamCode(inpCode);
 }

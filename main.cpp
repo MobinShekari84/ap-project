@@ -112,7 +112,33 @@ int teacherFunc(client *user) {
         return 2;
     }
     else if (inp == 2) {
-        user->showExams();
+        string inpCode;
+        examList *exam;
+        do {
+            user->showExams();
+            cout << "To return back, type \\MENU\\ with \\ included.";
+            cout << endl;
+            do {
+                cout << "Enter exam code: ";
+                getline(cin, inpCode);
+                if (containNumber(inpCode) && inpCode != "\\MENU\\") {
+                    cout << "Error: exam code contains only numbers. Please try again.";
+                    cout << endl;
+                    cout << endl;
+                }
+            } while (containNumber(inpCode) && inpCode != "\\MENU\\");
+            if (inpCode != "\\MENU\\") {
+                exam = user->searchExamCode(inpCode);
+                if (exam != NULL) {
+                    exam->print(1);
+                    printSeparator(printConst);
+                }
+                else {
+                    cout << "Error: there is no exam with this code. Please try again.";
+                    cout << endl;
+                }
+            }
+        } while (inpCode != "\\MENU\\" && exam == NULL);
         return 2;
     }
     else if (inp == 3) {

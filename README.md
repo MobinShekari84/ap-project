@@ -2,6 +2,6 @@
 
 ### Log-in & Sign-up
 ### Teacher 
-#### Create Exam
-#### View Exam
+Create Exam
+View Exam
 ### Student

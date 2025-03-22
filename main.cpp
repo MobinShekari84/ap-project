@@ -3,7 +3,7 @@
 
 using namespace std;
 
-int teacherFunc(client *user) {
+int teacherFunc(client *user, examList *allExams) {
     string examName;
     string question;
     string answer;
@@ -109,6 +109,7 @@ int teacherFunc(client *user) {
             }
         } while (inp != 4);
         user->addExam(examName, examCode, examQuestions, examAnswers, questionNumber);
+        new examList(allExams, examName, examCode, examQuestions, examAnswers, questionNumber);
         return 2;
     }
     else if (inp == 2) {
@@ -116,10 +117,10 @@ int teacherFunc(client *user) {
         examList *exam;
         do {
             user->showExams();
-            cout << "To return back, type \\MENU\\ with \\ included.";
-            cout << endl;
             do {
-                cout << "Enter exam code: ";
+                cout << "To return back, type \\MENU\\ with \\ included.";
+                cout << endl;
+                cout << "Enter exam code (should only contain number): ";
                 getline(cin, inpCode);
                 if (containNumber(inpCode) && inpCode != "\\MENU\\") {
                     cout << "Error: exam code contains only numbers. Please try again.";
@@ -149,7 +150,74 @@ int teacherFunc(client *user) {
     }
 }
 
-int SignUpFunc(client *head) {
+int studentFunc(client *user, examList *allExams) {
+    int inp;
+    string inpCode;
+    cout << "   Student's Page";
+    cout << endl;
+    cout << endl;
+    cout << "1. Add an exam";
+    cout << endl;
+    cout << "2. View exams";
+    cout << endl;
+    cout << "3. Participate in an exam";
+    cout << endl;
+    cout << "4. Return to main menu";
+    cout << endl;
+    cout << "5. Exit Programm";
+    cout << endl;
+    cout << endl;
+    printSeparator(lowPrintConst);
+    inp = getChoises(5);
+    if (inp == 1) {
+        printSeparator(printConst);
+        cout << endl;
+        cout << "   Add an exam";
+        cout << endl;
+        cout << endl;
+        examList *exam;
+        do {
+            do {
+                cout << "To return back, type \\MENU\\ with \\ included.";
+                cout << endl;
+                cout << "Enter the exam code (should only contain numbers): ";
+                getline(cin, inpCode);
+                cout << endl;
+                if (containNumber(inpCode) && inpCode != "\\MENU\\") {
+                    cout << "Error: exam code contains only numbers. Please try again.";
+                    cout << endl;
+                    cout << endl;
+                }
+            } while (containNumber(inpCode) && inpCode != "\\MENU\\");
+            if (inpCode != "\\MENU\\") {
+                exam = allExams->searchExamCode(inpCode);
+                if (exam != NULL) {
+                    exam->print(1);
+                    printSeparator(printConst);
+                }
+                else {
+                    cout << "Error: there is no exam with this code. Please try again.";
+                    cout << endl;
+                }
+            }
+        } while (inpCode != "\\MENU\\" && exam == NULL);
+        return 2;
+    }
+    else if (inp == 2) {
+        return 2;
+    }
+    else if (inp == 3) {
+        return 2;
+    }
+    else if (inp == 4) {
+        return 1;
+    }
+    else {
+        return 0;
+    }
+}
+
+int SignUpFunc(client *head, examList *allExams) {
     // =========== variable 
     int inp;
     client *newUser;
@@ -233,7 +301,7 @@ int SignUpFunc(client *head) {
     }
 }
 
-int loginFunc(client *head) {
+int loginFunc(client *head, examList *allExams) {
     // =========== variable 
     int inp;
     string userName;
@@ -289,7 +357,12 @@ int loginFunc(client *head) {
         cout << endl;
         if (user->isTeacher()) {
             do {
-                inp = teacherFunc(user);
+                inp = teacherFunc(user, allExams);
+            } while (inp == 2);
+        }
+        else {
+            do {
+                inp = studentFunc(user, allExams);
             } while (inp == 2);
         }
         return inp;
@@ -302,7 +375,7 @@ int loginFunc(client *head) {
     }
 }
 
-int welcomeFunc(client *head) {
+int welcomeFunc(client *head, examList *allExams) {
     // =========== variable 
     int inp;
     // ==================== 
@@ -329,10 +402,10 @@ int welcomeFunc(client *head) {
     printSeparator(lowPrintConst);
     inp = getChoises(3);
     if (inp == 1) {
-        return SignUpFunc(head);
+        return SignUpFunc(head, allExams);
     }
     else if (inp == 2) {
-        return loginFunc(head);
+        return loginFunc(head, allExams);
     }
     else {
         return 0;
@@ -342,7 +415,8 @@ int welcomeFunc(client *head) {
 int main() {
     srand(time(0));
     client *head = new client;
-    while (welcomeFunc(head)) {
+    examList *allExams = new examList;
+    while (welcomeFunc(head, allExams)) {
         continue;
     }
     delete head;

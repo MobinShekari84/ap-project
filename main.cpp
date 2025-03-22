@@ -213,15 +213,16 @@ int SignUpFunc(client *head) {
         newUser = new teacher(head, userName, userId, userPass, userCourse);
     }
     if (inp == 1 || inp == 2) {
+        printSeparator(printConst);
+        cout << endl;
+        cout << "   Signup Successful!";
+        cout << endl;
+        cout << endl;
         cout << "Thank you for signing up! You can now login with your credentials.";
         cout << endl;
-        printSeparator(printConst);
-        cout << endl;
-        printSeparator(printConst);
-        cout << "   Signup Successful!" << endl;
-        printSeparator(printConst);
         cout << endl;
         newUser->print();
+        cout << endl;
         return 1;
     }
     else if (inp == 3) {

@@ -424,6 +424,7 @@ teacher::~teacher() {
 void teacher::print() {
     cout << "Usename: " << this->userName;
     cout << endl;
+    cout << "Courses: ";
     userCourse->print();
     cout << endl;
     cout << "User ID: " << this->userId;

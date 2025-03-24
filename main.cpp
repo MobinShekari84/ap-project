@@ -208,6 +208,54 @@ int studentFunc(client *head, client *user) {
         return 2;
     }
     else if (inp == 3) {
+        printSeparator(printConst);
+        cout << endl;
+        cout << "   Participate in an exam";
+        cout << endl;
+        cout << endl;
+        examList *exam;
+        do {
+            do {
+                cout << "To return back, type \\MENU\\ with \\ included.";
+                cout << endl;
+                cout << "Enter the exam code you've registered (should only contain numbers): ";
+                getline(cin, inpCode);
+                cout << endl;
+                if (containNumber(inpCode) && inpCode != "\\MENU\\") {
+                    cout << "Error: exam code contains only numbers. Please try again.";
+                    cout << endl;
+                    cout << endl;
+                }
+            } while (containNumber(inpCode) && inpCode != "\\MENU\\");
+            if (inpCode != "\\MENU\\") {
+                exam = user->getExam(inpCode, head);
+                if (exam != NULL && exam->getQuestionNumber() > 0) {
+                    int correctAnswers = exam->participateExam();
+                    printSeparator(printConst);
+                    printSeparator(printConst);
+                    cout << endl;
+                    cout << "Your score is " << (1.0 * correctAnswers) / (1.0 * exam->getQuestionNumber());
+                    cout << endl;
+                    cout << endl;
+                    printSeparator(printConst);
+                    printSeparator(printConst);
+                }
+                else if (exam->getQuestionNumber() <= 0) {
+                    printSeparator(printConst);
+                    printSeparator(printConst);
+                    cout << endl;
+                    cout << "Exam has no questions!";
+                    cout << endl;
+                    cout << endl;
+                    printSeparator(printConst);
+                    printSeparator(printConst);
+                }
+                else {
+                    cout << "Error: there is no exam with this code. Please try again.";
+                    cout << endl;
+                }
+            }
+        } while (inpCode != "\\MENU\\" && exam == NULL);
         return 2;
     }
     else if (inp == 4) {

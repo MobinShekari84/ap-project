@@ -21,6 +21,7 @@ class linkedListString {
         linkedListString* deleteInd(int);
         void addToInd(int);
         string getInd(int);
+        int findString(string);
 };
 
 linkedListString::linkedListString() {
@@ -110,6 +111,18 @@ string linkedListString::getInd(int k) {
     return nextString->getInd(k);
 }
 
+int linkedListString::findString(string inpCode) {
+    if (str == inpCode) {
+        return ind;
+    }
+    else if (nextString == NULL) {
+        return -1;
+    }
+    else {
+        return nextString->findString(inpCode);
+    }
+}
+
 // ==================================================================
 // ==================================================================
 // ==================================================================
@@ -130,6 +143,8 @@ class examList {
         void changeNextExam(examList *);
         void showExams();
         examList* searchExamCode(string);
+        int participateExam();
+        int getQuestionNumber();
 };
 
 examList::examList() {
@@ -238,6 +253,50 @@ examList* examList::searchExamCode(string inpCode) {
     return NULL;
 }
 
+int examList::participateExam() {
+    int correctAnswers = 0;
+    if (examName == "\\HEAD\\") {
+        cout << "Error: exam is HEAD.";
+        cout << endl;
+    }
+    else {
+        cout << endl;
+        cout << "Exam name: " << examName << " - Exam code: " << examCode << " - Number of questions: " << examQuestionNumber;
+        cout << endl;
+        cout << endl;
+        printSeparator(lowPrintConst);
+        for (int i = 1; i <= examQuestionNumber; i++) {
+            cout << "Question number " << i << ": ";
+            examQuestion->print(i);
+            cout << endl;
+            string ans;
+            do {
+                cout << "Enter your answer: ";
+                getline(cin, ans);
+                if (containNumber(ans)) {
+                    cout << "Error: answer contains only numbers. Please try again.";
+                    cout << endl;
+                    cout << endl;
+                }
+            } while (containNumber(ans));
+            if (examAnswer->getInd(i) == ans) {
+                correctAnswers++;
+            }
+            cout << endl;
+            cout << endl;
+            printSeparator(lowPrintConst);
+        }
+        cout << endl;
+        printSeparator(printConst);
+    }
+    return correctAnswers;
+
+}
+
+int examList::getQuestionNumber() {
+    return examQuestionNumber;
+}
+
 // ==================================================================
 // ==================================================================
 // ==================================================================
@@ -265,6 +324,7 @@ class client {
         virtual void showExams(client *);
         virtual examList* searchExamCode(string);
         virtual void addExamCode(string);
+        virtual examList* getExam(string, client*);
 };
 
 client::client() {
@@ -381,6 +441,13 @@ void client::addExamCode(string examCode) {
     cout << endl;
 }
 
+examList* client::getExam(string inpCode, client *head) {
+    cout << "Error: user is not teacher";
+    cout << endl;
+    return NULL;
+}
+
+
 // ==================================================================
 // ==================================================================
 // ==================================================================
@@ -396,6 +463,7 @@ class student : public client {
         virtual void print();
         virtual void addExamCode(string);
         virtual void showExams(client *);
+        examList* getExam(string, client*);
 };
 
 student::student(client *head, string userName, string userId, string userPass, string userStudyField) : client(head, userName, userId, userPass){
@@ -434,6 +502,16 @@ void student::showExams(client *head) {
         if (exam != NULL) {
             exam->print(2);
         }
+    }
+}
+
+examList* student::getExam(string inpCode, client *head) {
+    int ind = userExamCode->findString(inpCode);
+    if (ind == -1) {
+        return NULL;
+    }
+    else {
+        return head->searchExamCode(userExamCode->getInd(ind));
     }
 }
 

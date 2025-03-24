@@ -3,7 +3,7 @@
 
 using namespace std;
 
-int teacherFunc(client *user, examList *allExams) {
+int teacherFunc(client *head, client *user) {
     string examName;
     string question;
     string answer;
@@ -109,7 +109,6 @@ int teacherFunc(client *user, examList *allExams) {
             }
         } while (inp != 4);
         user->addExam(examName, examCode, examQuestions, examAnswers, questionNumber);
-        new examList(allExams, examName, examCode, examQuestions, examAnswers, questionNumber);
         return 2;
     }
     else if (inp == 2) {
@@ -150,7 +149,7 @@ int teacherFunc(client *user, examList *allExams) {
     }
 }
 
-int studentFunc(client *user, examList *allExams) {
+int studentFunc(client *head, client *user) {
     int inp;
     string inpCode;
     cout << "   Student's Page";
@@ -190,9 +189,10 @@ int studentFunc(client *user, examList *allExams) {
                 }
             } while (containNumber(inpCode) && inpCode != "\\MENU\\");
             if (inpCode != "\\MENU\\") {
-                exam = allExams->searchExamCode(inpCode);
+                exam = head->searchExamCode(inpCode);
                 if (exam != NULL) {
-                    exam->print(1);
+                    exam->print(2);
+                    user->addExamCode(inpCode);
                     printSeparator(printConst);
                 }
                 else {
@@ -204,6 +204,7 @@ int studentFunc(client *user, examList *allExams) {
         return 2;
     }
     else if (inp == 2) {
+        user->showExams(head);
         return 2;
     }
     else if (inp == 3) {
@@ -217,7 +218,7 @@ int studentFunc(client *user, examList *allExams) {
     }
 }
 
-int SignUpFunc(client *head, examList *allExams) {
+int SignUpFunc(client *head) {
     // =========== variable 
     int inp;
     client *newUser;
@@ -301,7 +302,7 @@ int SignUpFunc(client *head, examList *allExams) {
     }
 }
 
-int loginFunc(client *head, examList *allExams) {
+int loginFunc(client *head) {
     // =========== variable 
     int inp;
     string userName;
@@ -357,12 +358,12 @@ int loginFunc(client *head, examList *allExams) {
         cout << endl;
         if (user->isTeacher()) {
             do {
-                inp = teacherFunc(user, allExams);
+                inp = teacherFunc(head, user);
             } while (inp == 2);
         }
         else {
             do {
-                inp = studentFunc(user, allExams);
+                inp = studentFunc(head, user);
             } while (inp == 2);
         }
         return inp;
@@ -375,7 +376,7 @@ int loginFunc(client *head, examList *allExams) {
     }
 }
 
-int welcomeFunc(client *head, examList *allExams) {
+int welcomeFunc(client *head) {
     // =========== variable 
     int inp;
     // ==================== 
@@ -402,10 +403,10 @@ int welcomeFunc(client *head, examList *allExams) {
     printSeparator(lowPrintConst);
     inp = getChoises(3);
     if (inp == 1) {
-        return SignUpFunc(head, allExams);
+        return SignUpFunc(head);
     }
     else if (inp == 2) {
-        return loginFunc(head, allExams);
+        return loginFunc(head);
     }
     else {
         return 0;
@@ -415,8 +416,7 @@ int welcomeFunc(client *head, examList *allExams) {
 int main() {
     srand(time(0));
     client *head = new client;
-    examList *allExams = new examList;
-    while (welcomeFunc(head, allExams)) {
+    while (welcomeFunc(head)) {
         continue;
     }
     delete head;

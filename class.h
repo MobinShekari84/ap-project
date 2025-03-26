@@ -254,7 +254,10 @@ examList* examList::searchExamCode(string inpCode) {
 }
 
 int examList::participateExam() {
-    int correctAnswers = 0;
+    int *correctAnswers = new int[examQuestionNumber + 1];
+    for (int i = 1; i <= examQuestionNumber; i++) {
+        correctAnswers[i] = 0;
+    }
     if (examName == "\\HEAD\\") {
         cout << "Error: exam is HEAD.";
         cout << endl;
@@ -271,16 +274,34 @@ int examList::participateExam() {
             cout << endl;
             string ans;
             do {
+                if (i > 1) {
+                    cout << "Enter \\BACK\\ to return to previous question.";
+                    cout << endl;
+                }
+                if (i < examQuestionNumber) {
+                    cout << "Enter \\NEXT\\ to go to next question.";
+                    cout << endl;
+                }
                 cout << "Enter your answer: ";
                 getline(cin, ans);
-                if (containNumber(ans)) {
+                if (i > 1 && ans == "\\BACK\\") {
+                    i -= 2;
+                    break;
+                }
+                else if (i < examQuestionNumber && ans == "\\NEXT\\") {
+                    break;
+                }
+                else if (containNumber(ans)) {
                     cout << "Error: answer contains only numbers. Please try again.";
                     cout << endl;
                     cout << endl;
                 }
             } while (containNumber(ans));
-            if (examAnswer->getInd(i) == ans) {
-                correctAnswers++;
+            if (containNumber(ans) == 0 && examAnswer->getInd(i) == ans) {
+                correctAnswers[i] = 1;
+            }
+            else if (containNumber(ans) == 0) {
+                correctAnswers[i] = 0;
             }
             cout << endl;
             cout << endl;
@@ -289,7 +310,13 @@ int examList::participateExam() {
         cout << endl;
         printSeparator(printConst);
     }
-    return correctAnswers;
+    int numAnswer = 0;
+    cout << endl;
+    for (int i = 1; i <= examQuestionNumber; i++) {
+        numAnswer += correctAnswers[i];
+        cout << "question number " << i << " : " << (correctAnswers[i] ? "True" : "False") << endl;
+    }
+    return numAnswer;
 
 }
 

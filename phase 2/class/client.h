@@ -12,6 +12,8 @@ class Client {
         ~Client();
         virtual void print();
         string getUserId();
+        virtual void showExams();
+        virtual void viewExam(string);
 };
 
 Client::Client(string userName, string userPass, string userId) : userName(userName), userPass(userPass), userId(userId) {
@@ -29,4 +31,12 @@ void Client::print() {
 
 string Client::getUserId() {
     return userId;
+}
+
+void Client::showExams() {
+
+}
+
+void Client::viewExam(string examCode) {
+
 }

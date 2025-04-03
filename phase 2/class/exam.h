@@ -15,6 +15,8 @@ class Exam {
         void addQuestion(string, string);
         void print();
         void save(string);
+        int getQuestionNumber();
+        void removeQuestion(int);
 };
 
 Exam::Exam(string name, int code) : name(name), code(code) {
@@ -75,4 +77,16 @@ void Exam::save(string userId) {
         examFile << endl;
     }
     examFile.close();
+}
+
+int Exam::getQuestionNumber() {
+    return questionNumber;
+}
+
+void Exam::removeQuestion(int ind) {
+    swap(questions[ind - 1], questions[questionNumber - 1]);
+    swap(answers[ind - 1], answers[questionNumber - 1]);
+    questionNumber--;
+    questions.pop_back();
+    answers.pop_back();
 }

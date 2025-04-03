@@ -113,7 +113,15 @@ void signUpStudent() {
     cout << "User " << userName << " with ID " << userId << " and study field " << userStudyField << " has been created successfully!";
     cout << endl;
     ofstream studentsFile("files/students.txt", ios::app);
-    studentsFile << userName << " " << userId << " " << userPass << " " << userStudyField;
+    studentsFile << "*";
+    studentsFile << endl;
+    studentsFile << userName;
+    studentsFile << endl;
+    studentsFile << userPass;
+    studentsFile << endl;
+    studentsFile << userId;
+    studentsFile << endl;
+    studentsFile << userStudyField;
     studentsFile << endl;
     studentsFile.close();
 }
@@ -143,7 +151,14 @@ void signUpTeacher() {
     cout << "has been created successfully!";
     cout << endl;
     ofstream teachersFile("files/teachers.txt", ios::app);
-    teachersFile << userName << " " << userId << " " << userPass << " ";
+    teachersFile << "*";
+    teachersFile << endl;
+    teachersFile << userName;
+    teachersFile << endl;
+    teachersFile << userPass;
+    teachersFile << endl;
+    teachersFile << userId;
+    teachersFile << endl;
     vector <string> courses = userCourses->getCourses();
     for (string course : courses) {
         teachersFile << course << " ";

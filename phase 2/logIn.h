@@ -5,6 +5,7 @@
 #include "class/client.h"
 #include "class/student.h"
 #include "class/teacher.h"
+#include "teachersHub.h"
 using namespace std;
 
 void logInPrint() {
@@ -24,80 +25,32 @@ void logInPrint() {
     printSeparator(longPrintConst);
 }
 
-int findUserName(string line, string userName) {
-    string userNameInFile;
-    for (int i = 0, space = 0; i < line.size(); i++) {
-        if (line[i] == ' ') {
-            space++;
-        }
-        else if (space == 0) {
-            userNameInFile = userNameInFile + line[i];
-        }
-    }
-    if (userNameInFile == userName) {
-        return 1;
-    }
-    return 0;
+Client *getStudent(string userName, string userPass, string userId, ifstream &logInFile) {
+    string studyField;
+    getline(logInFile, studyField);
+    return new Student(userName, userPass, userId, studyField);
 }
 
-int findUserPass(string line, string userPass) {
-    string userPassInFile;
-    for (int i = 0, space = 0; i < line.size(); i++) {
-        if (line[i] == ' ') {
-            space++;
-        }
-        else if (space == 2) {
-            userPassInFile = userPassInFile + line[i];
-        }
-    }
-    if (userPassInFile == userPass) {
-        return 1;
-    }
-    return 0;
-}
-
-string getUserId(string line) {
-    string userId = "";
-    for (int i = 0, space = 0; i < line.size(); i++) {
-        if (line[i] == ' ') {
-            space++;
-        }
-        else if (space == 1) {
-            userId = userId + line[i];
-        }
-    }
-    return userId;
-}
-
-string getUserStudyField(string line) {
-    string userStudyField = "";
-    for (int i = 0, space = 0; i < line.size(); i++) {
-        if (line[i] == ' ') {
-            space++;
-        }
-        else if (space == 3) {
-            userStudyField = userStudyField + line[i];
-        }
-    }
-    return userStudyField;
-}
-
-Courses* getUserCourses(string line) {
+Client *getTeacher(string userName, string userPass, string userId, ifstream &logInFile) {
     Courses *courses = new Courses();
-    string course = "";
-    for (int i = 0, space = 0; i < line.size(); i++) {
-        if (line[i] == ' ' && space < 3) {
-            space++;
-        }
-        else if (line[i] == ' ' && space == 3) {
-            courses->addCourse(course);
-            course = "";
-        }
-        else if (space == 3) {
-            course = course + line[i];
-        }
+    string course;
+    while (getline(logInFile, course) && course != "*") {
+        courses->addCourse(course);
     }
-    return courses;
+    return new Teacher(userName, userPass, userId, courses);
+}
+
+int doesUserExist(ifstream &logInFile, string userName, string userPass) {
+    string line;
+    getline(logInFile, line);
+    if (line != userName) {
+        return 0;
+    }
+    getline(logInFile, line);
+    if (line != userPass) {
+        return 0;
+    }
+    return 1;
 }
 
 Client* logInCheck(string filePath, int type) {
@@ -111,17 +64,17 @@ Client* logInCheck(string filePath, int type) {
     ifstream logInFile(filePath);
     string line;
     while (getline(logInFile, line)) {
-        if (findUserName(line, userName) && findUserPass(line, userPass)) {
-            string userId = getUserId(line);
+        if (line == "*" && doesUserExist(logInFile, userName, userPass)) {
+            getline(logInFile, line);
+            string userId = line;
             Client* user;
             if (type == 0) {
-                string studyField = getUserStudyField(line);
-                user = new Student(userName, userPass, userId, studyField);
+                user = getStudent(userName, userPass, userId, logInFile);
             }
             else {
-                Courses *courses = getUserCourses(line);
-                user = new Teacher(userName, userPass, userId, courses);
+                user = getTeacher(userName, userPass, userId, logInFile);
             }
+            logInFile.close();
             cout << "Login successful!" << endl;
             return user;
         }
@@ -150,8 +103,12 @@ int logIn() {
             return 1;
         }
         user->print();
+        int returnValue;
+        do {
+            returnValue = teachersHub(user);
+        } while (returnValue == 2);
         delete user;
-        return 1;
+        return returnValue;
     }
     if (option == 3) {
         return 1;

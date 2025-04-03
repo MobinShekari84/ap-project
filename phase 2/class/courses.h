@@ -20,6 +20,7 @@ Courses::Courses() {
 }
 
 Courses::~Courses() {
+    courses.clear();
 }
 
 void Courses::addCourse(string course) {

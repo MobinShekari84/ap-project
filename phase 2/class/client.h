@@ -12,6 +12,7 @@ class Client {
         ~Client();
         virtual void print();
         string getUserId();
+        virtual void addExam(int);
         virtual void showExams();
         virtual void viewExam(string);
 };
@@ -31,6 +32,10 @@ void Client::print() {
 
 string Client::getUserId() {
     return userId;
+}
+
+void Client::addExam(int examCode) {
+
 }
 
 void Client::showExams() {

@@ -14,7 +14,7 @@ class Exam {
         ~Exam();
         void addQuestion(string, string);
         void print();
-        void save(string);
+        void save();
         int getQuestionNumber();
         void removeQuestion(int);
 };
@@ -47,12 +47,11 @@ void Exam::print() {
     cout << endl;
 }
 
-void Exam::save(string userId) {
+void Exam::save() {
     ofstream examFile("files/exams.txt", ios::app);
     // structure: 
     // *
     // examCode
-    // userId -> id for teacher
     // examName
     // questionNumber
     // question1
@@ -63,8 +62,6 @@ void Exam::save(string userId) {
     examFile << "*";
     examFile << endl;
     examFile << code;
-    examFile << endl;
-    examFile << userId;
     examFile << endl;
     examFile << name;
     examFile << endl;

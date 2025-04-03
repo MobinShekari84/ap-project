@@ -109,7 +109,8 @@ void createExam(Client *user) {
     } while (option != 4);
     cout << "Exam created successfully.";
     cout << endl;
-    exam->save(user->getUserId());
+    exam->save();
+    user->addExam(examCode);
     delete exam;
 }
 

@@ -25,17 +25,34 @@ void logInPrint() {
     printSeparator(longPrintConst);
 }
 
-Client *getStudent(string userName, string userPass, string userId, ifstream &logInFile) {
-    string studyField;
-    getline(logInFile, studyField);
+Client *getStudent(string userName, string userPass, string userId) {
+    ifstream studentFile("files/students/" + userId + ".txt");
+    string line;
+    getline(studentFile, line);
+    getline(studentFile, line);
+    getline(studentFile, line);
+    getline(studentFile, line);
+    string studyField = line;
     return new Student(userName, userPass, userId, studyField);
 }
 
-Client *getTeacher(string userName, string userPass, string userId, ifstream &logInFile) {
+Client *getTeacher(string userName, string userPass, string userId) {
+    ifstream teacherFile("files/teachers/" + userId + ".txt");
+    string line;
+    getline(teacherFile, line);
+    getline(teacherFile, line);
+    getline(teacherFile, line);
+    getline(teacherFile, line);
     Courses *courses = new Courses();
-    string course;
-    while (getline(logInFile, course) && course != "*") {
-        courses->addCourse(course);
+    string course = "";
+    for (int i = 0; i < line.size(); i++) {
+        if (line[i] == ' ') {
+            courses->addCourse(course);
+            course = "";
+        }
+        else {
+            course += line[i];
+        }
     }
     return new Teacher(userName, userPass, userId, courses);
 }
@@ -69,10 +86,10 @@ Client* logInCheck(string filePath, int type) {
             string userId = line;
             Client* user;
             if (type == 0) {
-                user = getStudent(userName, userPass, userId, logInFile);
+                user = getStudent(userName, userPass, userId);
             }
             else {
-                user = getTeacher(userName, userPass, userId, logInFile);
+                user = getTeacher(userName, userPass, userId);
             }
             logInFile.close();
             cout << "Login successful!" << endl;

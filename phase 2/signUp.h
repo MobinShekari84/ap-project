@@ -113,6 +113,13 @@ void signUpStudent() {
     cout << "User " << userName << " with ID " << userId << " and study field " << userStudyField << " has been created successfully!";
     cout << endl;
     ofstream studentsFile("files/students.txt", ios::app);
+    // structure (for students.txt):
+    // *
+    // userName
+    // userPass
+    // userId
+    // *
+    // nextStudent...
     studentsFile << "*";
     studentsFile << endl;
     studentsFile << userName;
@@ -121,9 +128,22 @@ void signUpStudent() {
     studentsFile << endl;
     studentsFile << userId;
     studentsFile << endl;
-    studentsFile << userStudyField;
-    studentsFile << endl;
     studentsFile.close();
+    ofstream studentsIdFile("files/students/" + userId + ".txt", ios::app);
+    // structure (for students/userId.txt):
+    // userName
+    // userPass
+    // userId
+    // studyField
+    studentsIdFile << userName;
+    studentsIdFile << endl;
+    studentsIdFile << userPass;
+    studentsIdFile << endl;
+    studentsIdFile << userId;
+    studentsIdFile << endl;
+    studentsIdFile << userStudyField;
+    studentsIdFile << endl;
+    studentsIdFile.close();
 }
 
 void signUpTeacher() {
@@ -151,6 +171,13 @@ void signUpTeacher() {
     cout << "has been created successfully!";
     cout << endl;
     ofstream teachersFile("files/teachers.txt", ios::app);
+    // structure (for teachers.txt):
+    // *
+    // userName
+    // userPass
+    // userId
+    // *
+    // nextTeacher...
     teachersFile << "*";
     teachersFile << endl;
     teachersFile << userName;
@@ -159,12 +186,31 @@ void signUpTeacher() {
     teachersFile << endl;
     teachersFile << userId;
     teachersFile << endl;
+    teachersFile.close();
+    ofstream teachersIdFile("files/teachers/" + userId + ".txt", ios::app);
+    // structure (for teachers/userId.txt):
+    // userName
+    // userPass
+    // userId
+    // courses
+    // Exams:
+    // exam1
+    // exam2
+    // ...
+    teachersIdFile << userName;
+    teachersIdFile << endl;
+    teachersIdFile << userPass;
+    teachersIdFile << endl;
+    teachersIdFile << userId;
+    teachersIdFile << endl;
     vector <string> courses = userCourses->getCourses();
     for (string course : courses) {
-        teachersFile << course << " ";
+        teachersIdFile << course << " ";
     }
-    teachersFile << endl;
-    teachersFile.close();
+    teachersIdFile << endl;
+    teachersIdFile << "Exams:";
+    teachersIdFile << endl;
+    teachersIdFile.close();
     delete userCourses;
 }
 

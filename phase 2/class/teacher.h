@@ -12,6 +12,7 @@ class Teacher : public Client {
         Teacher(string, string, string, Courses*);
         ~Teacher();
         void print();
+        virtual void addExam(int);
         virtual void showExams();
         virtual void viewExam(string);
 };
@@ -31,30 +32,22 @@ void Teacher::print() {
     cout << endl;
 }
 
+void Teacher::addExam(int examCode) {
+    ofstream examsFile("files/teachers/" + userId + ".txt", ios::app);
+    examsFile << examCode;
+    examsFile << endl;
+    examsFile.close();
+}
+
 void Teacher::showExams() {
-    ifstream examsFile("files/exams.txt");
+    ifstream examsFile("files/teachers/" + userId + ".txt");
     string line;
+    while (getline(examsFile, line) && line != "Exams:") {
+        continue;
+    }
     while (getline(examsFile, line)) {
-        if (line != "*") {
-            continue;
-        }
-        getline(examsFile, line);
-        string examCode = line;
-        getline(examsFile, line);
-        if (userId != line) {
-            continue;
-        }
-        getline(examsFile, line);
-        string examName = line;
-        cout << "Exam name: " << examName;
+        cout << "Exam code: " << line;
         cout << endl;
-        cout << "Exam code: " << examCode;
-        cout << endl;
-        getline(examsFile, line);
-        int questionNumber = stoi(line); // string to int;
-        cout << "Question number: " << questionNumber;
-        cout << endl;
-        printSeparator(shortPrintConst);
     }
     examsFile.close();
 }
@@ -68,10 +61,6 @@ void Teacher::viewExam(string examCode) {
         }
         getline(examsFile, line);
         if (line != examCode) {
-            continue;
-        }
-        getline(examsFile, line);
-        if (line != userId) {
             continue;
         }
         getline(examsFile, line);

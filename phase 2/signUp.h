@@ -135,6 +135,10 @@ void signUpStudent() {
     // userPass
     // userId
     // studyField
+    // Exams:
+    // exam1
+    // exam2
+    // ...
     studentsIdFile << userName;
     studentsIdFile << endl;
     studentsIdFile << userPass;
@@ -142,6 +146,8 @@ void signUpStudent() {
     studentsIdFile << userId;
     studentsIdFile << endl;
     studentsIdFile << userStudyField;
+    studentsIdFile << endl;
+    studentsIdFile << "Exams:";
     studentsIdFile << endl;
     studentsIdFile.close();
 }

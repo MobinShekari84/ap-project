@@ -17,6 +17,7 @@ class Exam {
         void save();
         int getQuestionNumber();
         void removeQuestion(int);
+        int checkIfExamExists(string);
 };
 
 Exam::Exam(string name, int code) : name(name), code(code) {
@@ -86,4 +87,27 @@ void Exam::removeQuestion(int ind) {
     questionNumber--;
     questions.pop_back();
     answers.pop_back();
+}
+
+int checkIfExamExists(string examIdCode) {
+    ifstream examsFile("files/exams.txt");
+    string line;
+    while (getline(examsFile, line)) {
+        if (line != "*") {
+            continue;
+        }
+        getline(examsFile, line);
+        if (line == examIdCode) {
+            return 1;
+        }
+    }
+    examsFile.close();
+    return 0;
+}
+
+void addUserScore(string userId, string examIdCode, int score) {
+    ofstream userScoresFile("files/userScores.txt", ios::app);
+    userScoresFile << userId << " " << examIdCode << " " << score;
+    userScoresFile << endl;
+    userScoresFile.close();
 }

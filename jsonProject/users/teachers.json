@@ -1,0 +1,24 @@
+{
+    "teachers": [
+        {
+            "courses": [
+                "math",
+                "cs"
+            ],
+            "id": "0441396966",
+            "name": "mobin",
+            "password": "mobinshekari"
+        },
+        {
+            "courses": [
+                "math",
+                "cs",
+                "chem",
+                "phys"
+            ],
+            "id": "0441396965",
+            "name": "mobin",
+            "password": "mobinshekari"
+        }
+    ]
+}

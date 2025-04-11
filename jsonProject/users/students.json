@@ -1,0 +1,16 @@
+{
+    "students": [
+        {
+            "course": "math",
+            "id": "0441396968",
+            "name": "mobin",
+            "password": "mobinshekari"
+        },
+        {
+            "course": "cs",
+            "id": "0441396967",
+            "name": "mobin",
+            "password": "mobinshekari"
+        }
+    ]
+}

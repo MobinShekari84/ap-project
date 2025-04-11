@@ -6,6 +6,7 @@
 #include "class/student.h"
 #include "class/teacher.h"
 #include "teachersHub.h"
+#include "studentsHub.h"
 using namespace std;
 
 void logInPrint() {
@@ -92,11 +93,13 @@ Client* logInCheck(string filePath, int type) {
                 user = getTeacher(userName, userPass, userId);
             }
             logInFile.close();
+            printSeparator(longPrintConst);
             cout << "Login successful!" << endl;
             return user;
         }
     }
     logInFile.close();
+    printSeparator(shortPrintConst);
     cout << "No user found with this username and password";
     cout << endl;
     return NULL;
@@ -108,15 +111,23 @@ int logIn() {
     if (option == 1) {
         Client *user = logInCheck("files/students.txt", 0);
         if (user == NULL) {
+            cout << "Login failed. Please try again.";
+            cout << endl;
             return 1;
         }
         user->print();
+        int returnValue;
+        do {
+            returnValue = studentsHub(user);
+        } while (returnValue == 2);
         delete user;
-        return 1;
+        return returnValue;
     }
     if (option == 2) {
         Client *user = logInCheck("files/teachers.txt", 1);
         if (user == NULL) {
+            cout << "Login failed. Please try again.";
+            cout << endl;
             return 1;
         }
         user->print();

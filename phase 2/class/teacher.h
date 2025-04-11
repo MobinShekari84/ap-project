@@ -12,9 +12,10 @@ class Teacher : public Client {
         Teacher(string, string, string, Courses*);
         ~Teacher();
         void print();
-        virtual void addExam(int);
+        virtual void addExam(string);
         virtual void showExams();
         virtual void viewExam(string);
+        virtual int checkIfUserHasExam(string);
 };
 
 Teacher::Teacher(string userName, string userPass, string userId, Courses *courses) : Client(userName, userPass, userId), courses(courses) {
@@ -32,7 +33,7 @@ void Teacher::print() {
     cout << endl;
 }
 
-void Teacher::addExam(int examCode) {
+void Teacher::addExam(string examCode) {
     ofstream examsFile("files/teachers/" + userId + ".txt", ios::app);
     examsFile << examCode;
     examsFile << endl;
@@ -50,6 +51,20 @@ void Teacher::showExams() {
         cout << endl;
     }
     examsFile.close();
+}
+
+int Teacher::checkIfUserHasExam(string examCode) {
+    ifstream examsFile("files/teachers/" + userId + ".txt");
+    string line;
+    while (getline(examsFile, line) && line != "Exams:") {
+        continue;
+    }
+    while (getline(examsFile, line)) {
+        if (line == examCode) {
+            return 1;
+        }
+    }
+    return 0;
 }
 
 void Teacher::viewExam(string examCode) {

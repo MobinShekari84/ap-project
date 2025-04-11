@@ -110,7 +110,7 @@ void createExam(Client *user) {
     cout << "Exam created successfully.";
     cout << endl;
     exam->save();
-    user->addExam(examCode);
+    user->addExam(to_string(examCode));
     delete exam;
 }
 
@@ -120,14 +120,21 @@ void viewExams(Client *user) {
     cout << endl;
     cout << endl;
     user->showExams();
-    string examCode;
     cout << endl;
-    cout << "Enter the exam code to view (type MENU to return back): ";
-    getline(cin, examCode);
-    if (examCode == "MENU") {
-        return;
-    }
+    string examCode;
+    do {
+        cout << "Enter the exam code to view (type MENU to return back): ";
+        getline(cin, examCode);
+        if (examCode == "MENU") {
+            return;
+        }
+        if (user->checkIfUserHasExam(examCode) == 0) {
+            cout << "Error: Exam not found. Please try again.";
+            cout << endl;
+        }
+    } while (user->checkIfUserHasExam(examCode) == 0);
     user->viewExam(examCode);
+    printSeparator(mediumPrintConst);
 }
 
 int teachersHub(Client *user) {

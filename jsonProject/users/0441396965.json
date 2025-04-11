@@ -1,0 +1,12 @@
+{
+    "courses": [
+        "math",
+        "cs",
+        "chem",
+        "phys"
+    ],
+    "id": "0441396965",
+    "name": "mobin",
+    "password": "mobinshekari",
+    "exams": []
+}

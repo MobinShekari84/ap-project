@@ -9,7 +9,7 @@ memory added to the database
 memory added to the database
 
 ### Teacher's hub
-nothing added yet
+added exam creation, exam viewing, exam removing, exam editing.
 
 ### Student's hub
 nothing added yet

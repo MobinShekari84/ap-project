@@ -23,7 +23,7 @@ class User {
         string getUserId();
         virtual void addExam(int examCode) = 0;
         virtual void findExam(string examCode) = 0;
-        virtual void addResult(int examCode, int correctAnswers);
+        virtual void addResult(int examCode, int totalPoints, int correctPoints, int negativePoints, int questions, vector <string> userLongAnswers, vector <pair <int, bool>> usersAnswers);
 };
 
 User::User() {
@@ -81,7 +81,7 @@ string User::getUserId() {
     return userId;
 }
 
-void User::addResult(int examCode, int correctAnswers) {
+void User::addResult(int examCode, int totalPoints, int correctPoints, int negativePoints, int questions, vector <string> userLongAnswers, vector <pair <int, bool>> usersAnswers) {
 
 }
 

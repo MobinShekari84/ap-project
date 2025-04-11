@@ -1,8 +1,33 @@
 {
     "course": "cs",
+    "exams": [
+        749030773
+    ],
     "id": "0441396967",
     "name": "mobin",
     "password": "mobinshekari",
-    "exams": [],
-    "results": []
+    "results": [
+        {
+            "correctPoints": 3,
+            "examCode": 749030773,
+            "negativePoints": -1,
+            "questions": 3,
+            "totalPoints": 7,
+            "userLongAnswers": [],
+            "usersAnswers": [
+                [
+                    1,
+                    true
+                ],
+                [
+                    2,
+                    false
+                ],
+                [
+                    3,
+                    false
+                ]
+            ]
+        }
+    ]
 }

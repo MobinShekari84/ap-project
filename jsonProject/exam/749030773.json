@@ -1,0 +1,45 @@
+{
+    "answers": [
+        {
+            "answer": 3,
+            "negativePoints": -1,
+            "options": [
+                "1",
+                "2",
+                "12"
+            ],
+            "points": 3,
+            "type": "multipleChoice"
+        },
+        {
+            "answer": 1,
+            "negativePoints": 0,
+            "options": [
+                "yes",
+                "no"
+            ],
+            "points": 1,
+            "type": "multipleChoice"
+        },
+        {
+            "answer": 4,
+            "negativePoints": -1,
+            "options": [
+                "NO",
+                "No",
+                "nO",
+                "no",
+                "yes"
+            ],
+            "points": 3,
+            "type": "multipleChoice"
+        }
+    ],
+    "examCode": 749030773,
+    "examName": "exam num 2",
+    "questions": [
+        "2 + 10",
+        "yes",
+        "no"
+    ]
+}

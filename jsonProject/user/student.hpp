@@ -20,7 +20,7 @@ class Student : public User {
         ~Student();
         void addExam(int examCode);
         void findExam(string examCode);
-        void addResult(int examCode, int correctAnswers);
+        void addResult(int examCode, int totalPoints, int correctPoints, int negativePoints, int questions, vector <string> userLongAnswers, vector <pair <int, bool>> usersAnswers);
 };
 
 Student::Student() {
@@ -93,10 +93,15 @@ void Student::findExam(string examCode) {
     }
 }
 
-void Student::addResult(int examCode, int correctAnswers) {
+void Student::addResult(int examCode, int totalPoints, int correctPoints, int negativePoints, int questions, vector <string> userLongAnswers, vector <pair <int, bool>> usersAnswers) {
     json result;
     result["examCode"] = examCode;
-    result["correctAnswers"] = correctAnswers;
+    result["totalPoints"] = totalPoints;
+    result["correctPoints"] = correctPoints;
+    result["negativePoints"] = negativePoints;
+    result["questions"] = questions;
+    result["userLongAnswers"] = userLongAnswers;
+    result["usersAnswers"] = usersAnswers;
     results.push_back(result);
     fstream file("users/" + userId + ".json");
     json studentJson;

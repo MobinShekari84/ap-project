@@ -1,15 +1,54 @@
 {
     "course": "math",
     "exams": [
-        205610270
+        34334267,
+        749030773
     ],
     "id": "0441396968",
     "name": "mobin",
     "password": "mobinshekari",
     "results": [
         {
-            "correctAnswers": 1,
-            "examCode": 205610270
+            "correctPoints": 13,
+            "examCode": 34334267,
+            "negativePoints": 0,
+            "questions": 3,
+            "totalPoints": 13,
+            "userLongAnswers": [
+                "yes"
+            ],
+            "usersAnswers": [
+                [
+                    1,
+                    true
+                ],
+                [
+                    2,
+                    true
+                ]
+            ]
+        },
+        {
+            "correctPoints": 4,
+            "examCode": 749030773,
+            "negativePoints": -1,
+            "questions": 3,
+            "totalPoints": 7,
+            "userLongAnswers": [],
+            "usersAnswers": [
+                [
+                    1,
+                    true
+                ],
+                [
+                    2,
+                    true
+                ],
+                [
+                    3,
+                    false
+                ]
+            ]
         }
     ]
 }

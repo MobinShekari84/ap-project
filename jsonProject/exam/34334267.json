@@ -1,0 +1,32 @@
+{
+    "answers": [
+        {
+            "answer": 2,
+            "negativePoints": -1,
+            "options": [
+                "yes",
+                "no"
+            ],
+            "points": 3,
+            "type": "multipleChoice"
+        },
+        {
+            "answer": "9",
+            "negativePoints": -1,
+            "points": 10,
+            "type": "shortAnswer"
+        },
+        {
+            "answer": "yeees",
+            "points": 3,
+            "type": "longAnswer"
+        }
+    ],
+    "examCode": 34334267,
+    "examName": "exam 1",
+    "questions": [
+        "hava?",
+        "2 + 7",
+        "you good ?"
+    ]
+}

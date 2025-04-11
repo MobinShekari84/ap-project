@@ -1,6 +1,15 @@
 {
     "course": "math",
+    "exams": [
+        205610270
+    ],
     "id": "0441396968",
     "name": "mobin",
-    "password": "mobinshekari"
+    "password": "mobinshekari",
+    "results": [
+        {
+            "correctAnswers": 1,
+            "examCode": 205610270
+        }
+    ]
 }

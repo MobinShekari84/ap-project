@@ -12,10 +12,15 @@ using json = nlohmann::json;
 class Student : public User {
     private:
         string course;
+        vector <int> exams;
+        vector <json> results;
     public:
         Student();
         Student(string id);
         ~Student();
+        void addExam(int examCode);
+        void findExam(string examCode);
+        void addResult(int examCode, int correctAnswers);
 };
 
 Student::Student() {
@@ -27,6 +32,8 @@ Student::Student() {
     studentJson["id"] = userId;
     studentJson["password"] = userPass;
     studentJson["course"] = course;
+    studentJson["exams"] = exams;
+    studentJson["results"] = results;
     ofstream file("users/" + userId + ".json");
     file << studentJson.dump(4);
     file.close();
@@ -55,6 +62,10 @@ Student::Student(string id) : User(false) {
     userId = id;
     userPass = studentJson["password"];
     course = studentJson["course"];
+    exams.resize(studentJson["exams"].size());
+    copy(studentJson["exams"].begin(), studentJson["exams"].end(), exams.begin());
+    results.resize(studentJson["results"].size());
+    copy(studentJson["results"].begin(), studentJson["results"].end(), results.begin());
     file.close();
 }
 
@@ -62,5 +73,38 @@ Student::~Student() {
 
 }
 
+void Student::addExam(int examCode) {
+    exams.push_back(examCode);
+    fstream file("users/" + userId + ".json");
+    json studentJson;
+    file >> studentJson;
+    studentJson["exams"].push_back(examCode);
+    file.seekp(0);
+    file << studentJson.dump(4);
+    file.close();
+}
+
+void Student::findExam(string examCode) {
+    if (checkString(examCode, containNumber) == false) {
+        throw invalid_argument("Exam code must be a number.");
+    }
+    if (find(exams.begin(), exams.end(), stoi(examCode)) == exams.end()) {
+        throw invalid_argument("Exam not found.");
+    }
+}
+
+void Student::addResult(int examCode, int correctAnswers) {
+    json result;
+    result["examCode"] = examCode;
+    result["correctAnswers"] = correctAnswers;
+    results.push_back(result);
+    fstream file("users/" + userId + ".json");
+    json studentJson;
+    file >> studentJson;
+    studentJson["results"].push_back(result);
+    file.seekp(0);
+    file << studentJson.dump(4);
+    file.close();
+}
 
 #endif

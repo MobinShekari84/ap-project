@@ -24,6 +24,9 @@ class Exam {
         void removeQuestion();
         friend ostream& operator<<(ostream& os, Exam& exam);
         json getExamJson();
+        void hideInformations();
+        int getExamCode();
+        void participate(User *user);
 };
 
 Exam::Exam(string examName, int examCode) : examName(examName), examCode(examCode) {
@@ -33,7 +36,12 @@ Exam::Exam(string examName, int examCode, vector <string> questions, vector <str
 }
 
 Exam::Exam(json examJson) {
-    Exam(examJson["examName"], examJson["examCode"], examJson["questions"], examJson["answers"]);
+    examName = examJson["examName"];
+    examCode = examJson["examCode"];
+    questions.resize(examJson["questions"].size());
+    answers.resize(examJson["answers"].size());
+    copy(examJson["questions"].begin(), examJson["questions"].end(), questions.begin());
+    copy(examJson["answers"].begin(), examJson["answers"].end(), answers.begin());
 }
 
 Exam::~Exam() {
@@ -42,7 +50,7 @@ Exam::~Exam() {
 Exam* findExam(string examCode) {
     ifstream file("exam/" + examCode + ".json");
     if (!file.is_open()) {
-        return nullptr;
+        throw invalid_argument("Exam not found.");
     }
     json examJson;
     file >> examJson;
@@ -104,6 +112,15 @@ ostream& operator<<(ostream& os, Exam& exam) {
     return os;
 }
 
+void Exam::hideInformations() {
+    for (int i = 0; i < questions.size(); i++) {
+        questions[i] = "**********";
+    }
+    for (int i = 0; i < answers.size(); i++) {
+        answers[i] = "**********";
+    }
+}
+
 json Exam::getExamJson() {
     json exam;
     exam["examName"] = examName;
@@ -111,6 +128,40 @@ json Exam::getExamJson() {
     exam["questions"] = questions;
     exam["answers"] = answers;
     return exam;
+}
+
+int Exam::getExamCode() {
+    return examCode;
+}
+
+
+void Exam::participate(User *user) {
+    cout << "Participating in exam " << examName << " with code " << examCode << ".";
+    cout << endl;
+    cout << endl;
+    printSeparator(shortPrintConst);
+    cout << endl;
+    int correctAnswers = 0;
+    for (int i = 0; i < questions.size(); i++) {
+        cout << "Question " << i + 1 << ": " << questions[i];
+        cout << endl;
+        cout << "Enter the answer: ";
+        string answer;
+        getline(cin, answer);
+        if (answer == answers[i]) {
+            correctAnswers++;
+        }
+        cout << endl;
+        cout << endl;
+    }
+    cout << "You got " << correctAnswers << " out of " << questions.size() << " correct.";
+    user->addResult(examCode, correctAnswers);
+    cout << endl;
+    cout << endl;
+    cout << "Result added successfully.";
+    cout << endl;
+    cout << endl;
+    printSeparator(shortPrintConst);
 }
 
 #endif

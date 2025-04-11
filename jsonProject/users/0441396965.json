@@ -5,8 +5,10 @@
         "chem",
         "phys"
     ],
+    "exams": [
+        205610270
+    ],
     "id": "0441396965",
     "name": "mobin",
-    "password": "mobinshekari",
-    "exams": []
+    "password": "mobinshekari"
 }

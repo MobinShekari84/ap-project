@@ -73,11 +73,10 @@ void createExam(User *user) {
     int examCode;
     do {
         examCode = rand() % 1000000000;
-        Exam *exam = findExam(to_string(examCode));
-        if (exam != nullptr) {
-            delete exam;
+        try {
+            findExam(to_string(examCode));
         }
-        else {
+        catch (invalid_argument &e) {
             break;
         }
     } while (true);
@@ -115,24 +114,10 @@ void createExam(User *user) {
     cout << "Exam created successfully." << endl;
     cout << endl;
     user->addExam(examCode);
-    fstream examsFile("exam/exams.json");
-    json exams;
-    examsFile >> exams;
-    exams["exams"].push_back(examCode);
-    examsFile.seekp(0);
-    examsFile << exams.dump(4);
-    examsFile.close();
     printSeparator(mediumPrintConst);
-    fstream usersFile("users/" + user->getUserId() + ".json");
-    json userJson;
-    usersFile >> userJson;
-    userJson["exams"].push_back(examCode);
-    usersFile.seekp(0);
-    usersFile << userJson.dump(4);
-    usersFile.close();
 }
 
-void viewExams(User *user) {
+void viewExams(User *user, bool student) {
     printSeparator(longPrintConst);
     cout << endl;
     cout << "   View exams";
@@ -150,10 +135,17 @@ void viewExams(User *user) {
     cout << "Enter the exam code to view: ";
     string examCode;
     getline(cin, examCode);
-    Exam *exam = findExam(examCode);
-    if (exam == nullptr) {
-        cout << "Exam not found." << endl;
+    Exam *exam;
+    try {
+        user->findExam(examCode);
+        exam = findExam(examCode);
+    }
+    catch (invalid_argument &e) {
+        cout << e.what() << endl;
         return;
+    }
+    if (student) {
+        exam->hideInformations();
     }
     cout << *exam;
     delete exam;
@@ -169,7 +161,76 @@ bool teacherMenu(User *user) {
         return true;
     }
     if (option == 2) {
-        viewExams(user);
+        viewExams(user, false);
+        return true;
+    }
+    return false;
+}
+
+void addExamStudent(User *user) {
+    printSeparator(longPrintConst);
+    cout << endl;
+    cout << "Add an exam";
+    cout << endl;
+    cout << endl;
+    printSeparator(longPrintConst);
+    cout << endl;
+    cout << "Enter the exam code: ";
+    string examCode;
+    getline(cin, examCode);
+    try {
+        Exam *exam = findExam(examCode);
+        user->addExam(exam->getExamCode());
+        cout << "Exam added successfully." << endl;
+        cout << endl;
+        delete exam;
+        printSeparator(mediumPrintConst);
+    }
+    catch (invalid_argument &e) {
+        cout << e.what() << endl;
+        return;
+    }
+}
+
+void participateInExam(User *user) {
+    printSeparator(longPrintConst);
+    cout << endl;
+    cout << "Participate in an exam";
+    cout << endl;
+    cout << endl;
+    printSeparator(longPrintConst);
+    cout << endl;
+    cout << "Enter the exam code: ";
+    string examCode;
+    getline(cin, examCode);
+    Exam *exam;
+    try {
+        user->findExam(examCode);
+        exam = findExam(examCode);
+        exam->participate(user);
+        delete exam;
+    }
+    catch (invalid_argument &e) {
+        cout << e.what() << endl;
+        return;
+    }
+    cout << endl;
+    printSeparator(longPrintConst);
+}
+
+bool studentMenu(User *user) {
+    studentMenuPrint();
+    int option = getChoises(4);
+    if (option == 1) {
+        addExamStudent(user);
+        return true;
+    }
+    if (option == 2) {
+        viewExams(user, true);
+        return true;
+    }
+    if (option == 3) {
+        participateInExam(user);
         return true;
     }
     return false;
@@ -186,6 +247,8 @@ bool login() {
             cout << "Login successful" << endl;
             cout << endl;
             printSeparator(mediumPrintConst);
+            while (studentMenu(user) == true);
+            delete user;
             return true;
         }
         else {
@@ -206,6 +269,7 @@ bool login() {
             cout << endl;
             printSeparator(mediumPrintConst);
             while (teacherMenu(user) == true);
+            delete user;
             return true;
         }
         else {

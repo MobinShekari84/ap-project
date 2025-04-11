@@ -12,6 +12,7 @@ class Teacher : public User {
         Teacher(string id);
         ~Teacher();
         void addExam(int examCode);
+        void findExam(string examCode);
 };
 
 Teacher::Teacher() {
@@ -71,6 +72,22 @@ Teacher::~Teacher() {
 
 void Teacher::addExam(int examCode) {
     exams.push_back(examCode);
+    fstream file("users/" + userId + ".json");
+    json teacherJson;
+    file >> teacherJson;
+    teacherJson["exams"].push_back(examCode);
+    file.seekp(0);
+    file << teacherJson.dump(4);
+    file.close();
+}
+
+void Teacher::findExam(string examCode) {
+    if (checkString(examCode, containNumber) == false) {
+        throw invalid_argument("Exam code must be a number.");
+    }
+    if (find(exams.begin(), exams.end(), stoi(examCode)) == exams.end()) {
+        throw invalid_argument("Exam not found.");
+    }
 }
 
 #endif

@@ -21,7 +21,9 @@ class User {
         void isUserPassValid(string userPass);
         void isCourseValid(string course);
         string getUserId();
-        virtual void addExam(int examCode);
+        virtual void addExam(int examCode) = 0;
+        virtual void findExam(string examCode) = 0;
+        virtual void addResult(int examCode, int correctAnswers);
 };
 
 User::User() {
@@ -79,7 +81,8 @@ string User::getUserId() {
     return userId;
 }
 
-void User::addExam(int examCode) {
+void User::addResult(int examCode, int correctAnswers) {
+
 }
 
 #endif

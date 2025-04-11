@@ -2,5 +2,7 @@
     "course": "cs",
     "id": "0441396967",
     "name": "mobin",
-    "password": "mobinshekari"
+    "password": "mobinshekari",
+    "exams": [],
+    "results": []
 }

@@ -99,7 +99,22 @@ void createExamPrint() {
     printSeparator(shortPrintConst);
 }
 
-
+void studentMenuPrint() {
+    printSeparator(longPrintConst);
+    cout << "Student's Page";
+    cout << endl;
+    cout << endl;
+    cout << "1. Add an exam";
+    cout << endl;
+    cout << "2. View exams";
+    cout << endl;
+    cout << "3. Participate in an exam";
+    cout << endl;
+    cout << "4. Return to main menu";
+    cout << endl;
+    cout << endl;
+    printSeparator(longPrintConst);
+}
 
 int getChoises(int options) {
     int choice = 0;

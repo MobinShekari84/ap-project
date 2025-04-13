@@ -74,7 +74,7 @@ void createExam(User *user) {
     do {
         examCode = rand() % 1000000000;
         try {
-            findExam(to_string(examCode));
+            getExam(to_string(examCode));
         }
         catch (invalid_argument &e) {
             break;
@@ -138,7 +138,7 @@ void viewExams(User *user, bool student) {
     Exam *exam;
     try {
         user->findExam(examCode);
-        exam = findExam(examCode);
+        exam = getExam(examCode);
     }
     catch (invalid_argument &e) {
         cout << e.what() << endl;
@@ -179,7 +179,7 @@ void addExamStudent(User *user) {
     string examCode;
     getline(cin, examCode);
     try {
-        Exam *exam = findExam(examCode);
+        Exam *exam = getExam(examCode);
         user->addExam(exam->getExamCode());
         cout << "Exam added successfully." << endl;
         cout << endl;
@@ -206,7 +206,7 @@ void participateInExam(User *user) {
     Exam *exam;
     try {
         user->findExam(examCode);
-        exam = findExam(examCode);
+        exam = getExam(examCode);
         exam->participate(user);
         delete exam;
     }
@@ -218,9 +218,31 @@ void participateInExam(User *user) {
     printSeparator(longPrintConst);
 }
 
+void viewResults(User *user) {
+    printSeparator(longPrintConst);
+    cout << endl;
+    cout << "View results";
+    cout << endl;
+    cout << endl;
+    printSeparator(longPrintConst);
+    user->showResultsInfo();
+    cout << endl;
+    cout << "Enter the exam code to view: ";
+    string examCode;
+    getline(cin, examCode);
+    try {
+        user->findResult(examCode);
+        user->showResult(examCode);
+    }
+    catch (invalid_argument &e) {
+        cout << e.what() << endl;
+        return;
+    }
+}
+
 bool studentMenu(User *user) {
     studentMenuPrint();
-    int option = getChoises(4);
+    int option = getChoises(5);
     if (option == 1) {
         addExamStudent(user);
         return true;
@@ -231,6 +253,10 @@ bool studentMenu(User *user) {
     }
     if (option == 3) {
         participateInExam(user);
+        return true;
+    }
+    if (option == 4) {
+        viewResults(user);
         return true;
     }
     return false;

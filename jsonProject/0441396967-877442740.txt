@@ -1,0 +1,45 @@
+User id: 0441396967
+Exam code: 877442740
+Exam result: 
+
+Result number 1:
+Your total points achivied in multiple choice and short answer questions: -2 out of 6
+Your rank: 5
+Question number 1: 
+Your answer was incorrect
+Correct answer: salam
+
+Question number 3: 
+Your answer was incorrect
+Correct answer: salalam
+
+
+
+Result number 2:
+Your total points achivied in multiple choice and short answer questions: 2 out of 6
+Your rank: 3
+Question number 1: 
+Your answer was correct
+Correct answer: salam
+
+Question number 3: 
+Your answer was incorrect
+Correct answer: salalam
+
+
+
+Result number 3:
+Your total points achivied in multiple choice and short answer questions: 6 out of 6
+Your rank: 1
+Question number 1: 
+Your answer was correct
+Correct answer: salam
+
+Question number 3: 
+Your answer was correct
+Correct answer: salalam
+
+
+
+Average score: 2.8
+Highest score: 6

@@ -5,6 +5,7 @@
 #include "user.hpp"
 #include "../functions/stringFunctions.hpp"
 #include "../json/json.hpp"
+#include "../exam/exam.hpp"
 
 using namespace std;
 using json = nlohmann::json;
@@ -21,6 +22,8 @@ class Student : public User {
         void addExam(int examCode);
         void findExam(string examCode);
         void addResult(int examCode, int totalPoints, int correctPoints, int negativePoints, int questions, vector <string> userLongAnswers, vector <pair <int, bool>> usersAnswers);
+        void showResultsInfo();
+        void showResult(string examCode);
 };
 
 Student::Student() {
@@ -74,6 +77,9 @@ Student::~Student() {
 }
 
 void Student::addExam(int examCode) {
+    if (find(exams.begin(), exams.end(), examCode) != exams.end()) {
+        throw invalid_argument("Exam already added.");
+    }
     exams.push_back(examCode);
     fstream file("users/" + userId + ".json");
     json studentJson;
@@ -110,6 +116,57 @@ void Student::addResult(int examCode, int totalPoints, int correctPoints, int ne
     file.seekp(0);
     file << studentJson.dump(4);
     file.close();
+}
+
+void Student::showResultsInfo() {
+    for (int i = 0; i < results.size(); i++) {
+        printSeparator(shortPrintConst);
+        cout << "Exam code: " << results[i]["examCode"] << endl;
+        cout << "Total points: " << results[i]["totalPoints"] << endl;
+        cout << "Correct points: " << results[i]["correctPoints"] << endl;
+        cout << "Negative points: " << results[i]["negativePoints"] << endl;
+        cout << endl;
+    }
+    printSeparator(shortPrintConst);
+}
+
+void Student::showResult(string examCode) {
+    vector <int> ind; 
+    for (int i = 0; i < results.size(); i++) {
+        if (results[i]["examCode"].get<int>() == stoi(examCode)) {
+            ind.push_back(i);
+        }
+    }
+    if (ind.size() == 0) {
+        throw invalid_argument("Exam not found.");
+    }
+    ofstream examResult(userId + "-" + examCode + ".txt");
+    examResult << "User id: " << userId << endl;
+    examResult << "Exam code: " << examCode << endl;
+    examResult << "Exam result: " << endl;
+    examResult << endl;
+    Exam *exam = new Exam(stoi(examCode));
+    for (int i = 0; i < ind.size(); i++) {
+        examResult << "Result number " << i + 1 << ":" << endl;
+        examResult << "Your total points achivied in multiple choice and short answer questions: " << results[ind[i]]["correctPoints"].get<int>() + results[ind[i]]["negativePoints"].get<int>() << " out of " << results[ind[i]]["totalPoints"].get<int>() << endl;
+        examResult << "Your rank: " << exam->findRank(results[ind[i]]["correctPoints"].get<int>() + results[ind[i]]["negativePoints"].get<int>()) << endl;
+        for (pair <int, bool> answer: results[ind[i]]["usersAnswers"]) {
+            examResult << "Question number " << answer.first << ": " << endl;
+            examResult << "Your answer was " << (answer.second ? "correct" : "incorrect") << endl;
+            try {
+                examResult << "Correct answer: " << exam->getAnswer(answer.first) << endl;
+            }
+            catch (invalid_argument &e) {
+                examResult << e.what() << endl;
+            }
+            examResult << endl;
+        }
+        examResult << endl;
+        examResult << endl;
+    }
+    examResult << "Average score: " << exam->findAverage() << endl;
+    examResult << "Highest score: " << exam->findHighest() << endl;
+    examResult.close();
 }
 
 #endif

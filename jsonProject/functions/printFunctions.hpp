@@ -110,7 +110,9 @@ void studentMenuPrint() {
     cout << endl;
     cout << "3. Participate in an exam";
     cout << endl;
-    cout << "4. Return to main menu";
+    cout << "4. View results";
+    cout << endl;
+    cout << "5. Return to main menu";
     cout << endl;
     cout << endl;
     printSeparator(longPrintConst);

@@ -1,23 +1,24 @@
 {
     "course": "cs",
     "exams": [
-        749030773
+        749030773,
+        877442740
     ],
     "id": "0441396967",
     "name": "mobin",
     "password": "mobinshekari",
     "results": [
         {
-            "correctPoints": 3,
+            "correctPoints": 0,
             "examCode": 749030773,
-            "negativePoints": -1,
+            "negativePoints": -2,
             "questions": 3,
             "totalPoints": 7,
             "userLongAnswers": [],
             "usersAnswers": [
                 [
                     1,
-                    true
+                    false
                 ],
                 [
                     2,
@@ -26,6 +27,66 @@
                 [
                     3,
                     false
+                ]
+            ]
+        },
+        {
+            "correctPoints": 0,
+            "examCode": 877442740,
+            "negativePoints": -2,
+            "questions": 3,
+            "totalPoints": 6,
+            "userLongAnswers": [
+                "d"
+            ],
+            "usersAnswers": [
+                [
+                    1,
+                    false
+                ],
+                [
+                    3,
+                    false
+                ]
+            ]
+        },
+        {
+            "correctPoints": 3,
+            "examCode": 877442740,
+            "negativePoints": -1,
+            "questions": 3,
+            "totalPoints": 6,
+            "userLongAnswers": [
+                "2"
+            ],
+            "usersAnswers": [
+                [
+                    1,
+                    true
+                ],
+                [
+                    3,
+                    false
+                ]
+            ]
+        },
+        {
+            "correctPoints": 6,
+            "examCode": 877442740,
+            "negativePoints": 0,
+            "questions": 3,
+            "totalPoints": 6,
+            "userLongAnswers": [
+                "2"
+            ],
+            "usersAnswers": [
+                [
+                    1,
+                    true
+                ],
+                [
+                    3,
+                    true
                 ]
             ]
         }

@@ -1,62 +1,72 @@
 {
     "answers": [
         {
-            "answer": 3,
+            "answer": 1,
             "negativePoints": -1,
             "options": [
-                "1",
-                "2",
-                "12"
+                "salam",
+                "khoobi",
+                "hi",
+                "hallo"
             ],
             "points": 3,
             "type": "multipleChoice"
         },
         {
-            "answer": 1,
-            "negativePoints": 0,
-            "options": [
-                "yes",
-                "no"
-            ],
-            "points": 1,
-            "type": "multipleChoice"
+            "answer": "salllaaaammm",
+            "points": 3,
+            "type": "longAnswer"
         },
         {
-            "answer": 4,
+            "answer": 1,
             "negativePoints": -1,
             "options": [
-                "NO",
-                "No",
-                "nO",
-                "no",
-                "yes"
+                "salalam",
+                "salam"
             ],
             "points": 3,
             "type": "multipleChoice"
         }
     ],
-    "examCode": 749030773,
-    "examName": "exam num 2",
+    "examCode": 877442740,
+    "examName": "exam 3",
     "questions": [
-        "2 + 10",
-        "yes",
-        "no"
+        "salam",
+        "salam",
+        "salalam"
     ],
     "results": [
         {
-            "correctPoints": 6,
-            "negativePoints": 0,
-            "totalPoints": 7,
+            "correctPoints": 3,
+            "negativePoints": -1,
+            "totalPoints": 6,
             "userId": "0441396968",
-            "userLongAnswers": [],
+            "userLongAnswers": [
+                "salaaaaam"
+            ],
             "usersAnswers": [
                 [
                     1,
                     true
                 ],
                 [
-                    2,
+                    3,
                     false
+                ]
+            ]
+        },
+        {
+            "correctPoints": 6,
+            "negativePoints": 0,
+            "totalPoints": 6,
+            "userId": "0441396968",
+            "userLongAnswers": [
+                "sallaaam"
+            ],
+            "usersAnswers": [
+                [
+                    1,
+                    true
                 ],
                 [
                     3,
@@ -67,16 +77,14 @@
         {
             "correctPoints": 0,
             "negativePoints": -2,
-            "totalPoints": 7,
+            "totalPoints": 6,
             "userId": "0441396967",
-            "userLongAnswers": [],
+            "userLongAnswers": [
+                "d"
+            ],
             "usersAnswers": [
                 [
                     1,
-                    false
-                ],
-                [
-                    2,
                     false
                 ],
                 [
@@ -88,17 +96,15 @@
         {
             "correctPoints": 3,
             "negativePoints": -1,
-            "totalPoints": 7,
-            "userId": "0441396969",
-            "userLongAnswers": [],
+            "totalPoints": 6,
+            "userId": "0441396967",
+            "userLongAnswers": [
+                "2"
+            ],
             "usersAnswers": [
                 [
                     1,
                     true
-                ],
-                [
-                    2,
-                    false
                 ],
                 [
                     3,
@@ -107,23 +113,21 @@
             ]
         },
         {
-            "correctPoints": 4,
-            "negativePoints": -1,
-            "totalPoints": 7,
-            "userId": "0441396969",
-            "userLongAnswers": [],
+            "correctPoints": 6,
+            "negativePoints": 0,
+            "totalPoints": 6,
+            "userId": "0441396967",
+            "userLongAnswers": [
+                "2"
+            ],
             "usersAnswers": [
                 [
                     1,
                     true
                 ],
                 [
-                    2,
-                    true
-                ],
-                [
                     3,
-                    false
+                    true
                 ]
             ]
         }

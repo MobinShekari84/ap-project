@@ -15,10 +15,12 @@ class Exam {
         int examCode;
         vector <string> questions;
         vector <json> answers;
+        vector <json> results;
     public:
         Exam(string examName, int examCode);
         Exam(string examName, int examCode, vector <string> questions, vector <json> answers);
         Exam(json examJson);
+        Exam(int examCode);
         ~Exam();
         void addQuestion();
         void removeQuestion();
@@ -30,12 +32,18 @@ class Exam {
         void addMultipleChoiceQuestion(string question);
         void addShortAnswerQuestion(string question);
         void addLongAnswerQuestion(string question);
+        void addResult(int examCode, string userId, int totalPoints, int correctPoints, int negativePoints, vector <string> userLongAnswers, vector <pair <int, bool>> usersAnswers);
+        string getAnswer(int questionNumber);
+        int findRank(int score);
+        double findAverage();
+        int findHighest();
 };
 
 Exam::Exam(string examName, int examCode) : examName(examName), examCode(examCode) {
 }
 
 Exam::Exam(string examName, int examCode, vector <string> questions, vector <json> answers) : examName(examName), examCode(examCode), questions(questions), answers(answers) {
+    results.resize(0);
 }
 
 Exam::Exam(json examJson) {
@@ -43,14 +51,31 @@ Exam::Exam(json examJson) {
     examCode = examJson["examCode"];
     questions.resize(examJson["questions"].size());
     answers.resize(examJson["answers"].size());
+    results.resize(examJson["results"].size());
     copy(examJson["questions"].begin(), examJson["questions"].end(), questions.begin());
     copy(examJson["answers"].begin(), examJson["answers"].end(), answers.begin());
-}
+    copy(examJson["results"].begin(), examJson["results"].end(), results.begin());
+}   
 
 Exam::~Exam() {
 }
 
-Exam* findExam(string examCode) {
+Exam::Exam(int examCode) {
+    fstream file("exam/" + to_string(examCode) + ".json");
+    json examJson;
+    file >> examJson;
+    examName = examJson["examName"];
+    examCode = examJson["examCode"];
+    questions.resize(examJson["questions"].size());
+    answers.resize(examJson["answers"].size());
+    results.resize(examJson["results"].size());
+    copy(examJson["questions"].begin(), examJson["questions"].end(), questions.begin());
+    copy(examJson["answers"].begin(), examJson["answers"].end(), answers.begin());
+    copy(examJson["results"].begin(), examJson["results"].end(), results.begin());
+    file.close();
+}
+
+Exam* getExam(string examCode) {
     ifstream file("exam/" + examCode + ".json");
     if (!file.is_open()) {
         throw invalid_argument("Exam not found.");
@@ -275,6 +300,16 @@ ostream& operator<<(ostream& os, Exam& exam) {
     return os;
 }
 
+string Exam::getAnswer(int questionNumber) {
+    if (questionNumber < 1 || questionNumber > questions.size()) {
+        throw invalid_argument("Invalid question number. Question number must be between 1 and " + to_string(questions.size()) + ".");
+    }
+    if (answers[questionNumber - 1]["type"].get<string>() == "multipleChoice") {
+        return answers[questionNumber - 1]["options"][answers[questionNumber - 1]["answer"].get<int>() - 1].get<string>();
+    }
+    return answers[questionNumber - 1]["answer"].get<string>();
+}
+
 void Exam::hideInformations() {
     for (int i = 0; i < questions.size(); i++) {
         questions[i] = "**********";
@@ -305,6 +340,23 @@ int Exam::getExamCode() {
     return examCode;
 }
 
+void Exam::addResult(int examCode, string userId, int totalPoints, int correctPoints, int negativePoints, vector <string> userLongAnswers, vector <pair <int, bool>> usersAnswers) {
+    json result;
+    result["userId"] = userId;
+    result["totalPoints"] = totalPoints;
+    result["correctPoints"] = correctPoints;
+    result["negativePoints"] = negativePoints;
+    result["userLongAnswers"] = userLongAnswers;
+    result["usersAnswers"] = usersAnswers;
+    results.push_back(result);
+    fstream file("exam/" + to_string(examCode) + ".json");
+    json examJson;
+    file >> examJson;
+    examJson["results"].push_back(result);
+    file.seekp(0);
+    file << examJson.dump(4);
+    file.close();
+}
 
 void Exam::participate(User *user) {
     cout << "Participating in exam " << examName << " with code " << examCode << ".";
@@ -374,12 +426,40 @@ void Exam::participate(User *user) {
     }
     cout << "You got score " << correctPoints + negativePoints << " out of " << totalPoints << " for short answer and multiple choice questions.";
     user->addResult(examCode, totalPoints, correctPoints, negativePoints, questions.size(), userLongAnswers, usersAnswers);
+    addResult(examCode, user->getUserId(), totalPoints, correctPoints, negativePoints, userLongAnswers, usersAnswers);
     cout << endl;
     cout << endl;
     cout << "Result added successfully.";
     cout << endl;
     cout << endl;
     printSeparator(shortPrintConst);
+}
+
+int Exam::findRank(int score) {
+    sort(results.begin(), results.end(), [](json a, json b) {
+        return a["correctPoints"].get<int>() + a["negativePoints"].get<int>() > b["correctPoints"].get<int>() + b["negativePoints"].get<int>();
+    });
+    for (int i = 0; i < results.size(); i++) {
+        if (results[i]["correctPoints"].get<int>() + results[i]["negativePoints"].get<int>() == score) {
+            return i + 1;
+        }
+    }
+    return 0;
+}
+
+double Exam::findAverage() {
+    int totalPoints = 0;
+    for (int i = 0; i < results.size(); i++) {
+        totalPoints += results[i]["correctPoints"].get<int>() + results[i]["negativePoints"].get<int>();
+    }
+    return 1.0 * totalPoints / results.size();
+}
+
+int Exam::findHighest() {
+    sort(results.begin(), results.end(), [](json a, json b) {
+        return a["correctPoints"].get<int>() + a["negativePoints"].get<int>() > b["correctPoints"].get<int>() + b["negativePoints"].get<int>();
+    });
+    return results[0]["correctPoints"].get<int>() + results[0]["negativePoints"].get<int>();
 }
 
 #endif

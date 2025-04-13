@@ -1,0 +1,23 @@
+User id: 0441396968
+Exam code: 749030773
+Exam result: 
+
+Result number 1:
+Your total points achivied in multiple choice and short answer questions: 6 out of 7
+Your rank: 1
+Question number 1: 
+Your answer was correct
+Correct answer: 12
+
+Question number 2: 
+Your answer was incorrect
+Correct answer: yes
+
+Question number 3: 
+Your answer was correct
+Correct answer: no
+
+
+
+Average score: 2
+Highest score: 6

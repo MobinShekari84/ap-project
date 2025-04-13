@@ -24,6 +24,7 @@ class Student : public User {
         void addResult(int examCode, int totalPoints, int correctPoints, int negativePoints, int questions, vector <string> userLongAnswers, vector <pair <int, bool>> usersAnswers);
         void showResultsInfo();
         void showResult(string examCode);
+        void findResult(string examCode);
 };
 
 Student::Student() {
@@ -140,21 +141,21 @@ void Student::showResult(string examCode) {
     if (ind.size() == 0) {
         throw invalid_argument("Exam not found.");
     }
-    ofstream examResult(userId + "-" + examCode + ".txt");
-    examResult << "User id: " << userId << endl;
-    examResult << "Exam code: " << examCode << endl;
-    examResult << "Exam result: " << endl;
+    ofstream examResult(userId + "-" + examCode + ".csv");
+    examResult << "User id, " << userId << endl;
+    examResult << "Exam code, " << examCode << endl;
+    examResult << "Exam result, " << endl;
     examResult << endl;
     Exam *exam = new Exam(stoi(examCode));
     for (int i = 0; i < ind.size(); i++) {
-        examResult << "Result number " << i + 1 << ":" << endl;
-        examResult << "Your total points achivied in multiple choice and short answer questions: " << results[ind[i]]["correctPoints"].get<int>() + results[ind[i]]["negativePoints"].get<int>() << " out of " << results[ind[i]]["totalPoints"].get<int>() << endl;
-        examResult << "Your rank: " << exam->findRank(results[ind[i]]["correctPoints"].get<int>() + results[ind[i]]["negativePoints"].get<int>()) << endl;
+        examResult << "Result of exam number " << i + 1 << " taken by user " << userId << ",";
+        examResult << "Your total points achivied in multiple choice and short answer questions, " << results[ind[i]]["correctPoints"].get<int>() + results[ind[i]]["negativePoints"].get<int>() << " out of " << results[ind[i]]["totalPoints"].get<int>() << endl;
+        examResult << ", Your rank: " << exam->findRank(results[ind[i]]["correctPoints"].get<int>() + results[ind[i]]["negativePoints"].get<int>()) << endl;
         for (pair <int, bool> answer: results[ind[i]]["usersAnswers"]) {
-            examResult << "Question number " << answer.first << ": " << endl;
-            examResult << "Your answer was " << (answer.second ? "correct" : "incorrect") << endl;
+            examResult << "Question number " << answer.first << ", ";
+            examResult << "Your answer was ," << (answer.second ? "correct" : "incorrect") << endl;
             try {
-                examResult << "Correct answer: " << exam->getAnswer(answer.first) << endl;
+                examResult << ", Correct answer, " << exam->getAnswer(answer.first) << endl;
             }
             catch (invalid_argument &e) {
                 examResult << e.what() << endl;
@@ -164,9 +165,20 @@ void Student::showResult(string examCode) {
         examResult << endl;
         examResult << endl;
     }
-    examResult << "Average score: " << exam->findAverage() << endl;
-    examResult << "Highest score: " << exam->findHighest() << endl;
+    examResult << "Average score, " << exam->findAverage() << endl;
+    examResult << "Highest score, " << exam->findHighest() << endl;
     examResult.close();
+    cout << "Exam results have been saved to " << userId << "-" << examCode << ".csv" << endl;
+    delete exam;
+}
+
+void Student::findResult(string examCode) {
+    if (checkString(examCode, containNumber) == false) {
+        throw invalid_argument("Exam code must be a number.");
+    }
+    if (find(exams.begin(), exams.end(), stoi(examCode)) == exams.end()) {
+        throw invalid_argument("Exam not found.");
+    }
 }
 
 #endif

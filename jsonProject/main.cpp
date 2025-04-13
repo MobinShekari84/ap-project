@@ -153,15 +153,41 @@ void viewExams(User *user, bool student) {
     printSeparator(longPrintConst);
 }
 
+void viewResults(User *user) {
+    printSeparator(longPrintConst);
+    cout << endl;
+    cout << "View results";
+    cout << endl;
+    cout << endl;
+    printSeparator(longPrintConst);
+    user->showResultsInfo();
+    cout << endl;
+    cout << "Enter the exam code to view: ";
+    string examCode;
+    getline(cin, examCode);
+    try {
+        user->findResult(examCode);
+        user->showResult(examCode);
+    }
+    catch (invalid_argument &e) {
+        cout << e.what() << endl;
+        return;
+    }
+}
+
 bool teacherMenu(User *user) {
     teacherMenuPrint();
-    int option = getChoises(3);
+    int option = getChoises(4);
     if (option == 1) {
         createExam(user);
         return true;
     }
     if (option == 2) {
         viewExams(user, false);
+        return true;
+    }
+    if (option == 3) {
+        viewResults(user);
         return true;
     }
     return false;
@@ -216,28 +242,6 @@ void participateInExam(User *user) {
     }
     cout << endl;
     printSeparator(longPrintConst);
-}
-
-void viewResults(User *user) {
-    printSeparator(longPrintConst);
-    cout << endl;
-    cout << "View results";
-    cout << endl;
-    cout << endl;
-    printSeparator(longPrintConst);
-    user->showResultsInfo();
-    cout << endl;
-    cout << "Enter the exam code to view: ";
-    string examCode;
-    getline(cin, examCode);
-    try {
-        user->findResult(examCode);
-        user->showResult(examCode);
-    }
-    catch (invalid_argument &e) {
-        cout << e.what() << endl;
-        return;
-    }
 }
 
 bool studentMenu(User *user) {

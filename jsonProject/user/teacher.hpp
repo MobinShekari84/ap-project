@@ -13,6 +13,9 @@ class Teacher : public User {
         ~Teacher();
         void addExam(int examCode);
         void findExam(string examCode);
+        void showResultsInfo();
+        void showResult(string examCode);
+        void findResult(string examCode);
 };
 
 Teacher::Teacher() {
@@ -82,6 +85,37 @@ void Teacher::addExam(int examCode) {
 }
 
 void Teacher::findExam(string examCode) {
+    if (checkString(examCode, containNumber) == false) {
+        throw invalid_argument("Exam code must be a number.");
+    }
+    if (find(exams.begin(), exams.end(), stoi(examCode)) == exams.end()) {
+        throw invalid_argument("Exam not found.");
+    }
+}
+
+void Teacher::showResultsInfo() {
+    for (int i = 0; i < exams.size(); i++) {
+        cout << "Exam code: " << exams[i] << endl;
+    }
+    printSeparator(shortPrintConst);
+}
+
+void Teacher::showResult(string examCode) {
+    Exam *exam = new Exam(stoi(examCode));
+    ofstream file;
+    file.open("Exam Results-" + examCode + ".csv");
+    try {
+        exam->showResults(file);
+        cout << "Exam results have been saved to Exam Results-" << examCode << ".csv" << endl;
+    }
+    catch (invalid_argument &e) {
+        cout << e.what() << endl;
+    }
+    file.close();
+    delete exam;
+}
+
+void Teacher::findResult(string examCode) {
     if (checkString(examCode, containNumber) == false) {
         throw invalid_argument("Exam code must be a number.");
     }

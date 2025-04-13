@@ -80,7 +80,9 @@ void teacherMenuPrint() {
     cout << endl;
     cout << "2. View exams";
     cout << endl;
-    cout << "3. Return to main menu";
+    cout << "3. View results";
+    cout << endl;
+    cout << "4. Return to main menu";
     cout << endl;
     cout << endl;
     printSeparator(longPrintConst);

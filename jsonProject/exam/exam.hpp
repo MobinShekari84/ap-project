@@ -37,6 +37,7 @@ class Exam {
         int findRank(int score);
         double findAverage();
         int findHighest();
+        void showResults(ostream& os);
 };
 
 Exam::Exam(string examName, int examCode) : examName(examName), examCode(examCode) {
@@ -47,8 +48,8 @@ Exam::Exam(string examName, int examCode, vector <string> questions, vector <jso
 }
 
 Exam::Exam(json examJson) {
-    examName = examJson["examName"];
-    examCode = examJson["examCode"];
+    examName = examJson["examName"].get<string>();
+    examCode = examJson["examCode"].get<int>();
     questions.resize(examJson["questions"].size());
     answers.resize(examJson["answers"].size());
     results.resize(examJson["results"].size());
@@ -64,8 +65,8 @@ Exam::Exam(int examCode) {
     fstream file("exam/" + to_string(examCode) + ".json");
     json examJson;
     file >> examJson;
-    examName = examJson["examName"];
-    examCode = examJson["examCode"];
+    examName = examJson["examName"].get<string>();
+    this->examCode = examJson["examCode"].get<int>();
     questions.resize(examJson["questions"].size());
     answers.resize(examJson["answers"].size());
     results.resize(examJson["results"].size());
@@ -460,6 +461,32 @@ int Exam::findHighest() {
         return a["correctPoints"].get<int>() + a["negativePoints"].get<int>() > b["correctPoints"].get<int>() + b["negativePoints"].get<int>();
     });
     return results[0]["correctPoints"].get<int>() + results[0]["negativePoints"].get<int>();
+}
+
+void Exam::showResults(ostream& os) {
+    if (results.size() == 0) {
+        throw invalid_argument("No results found.");
+    }
+    os << endl;
+    os << "Exam code, " << examCode << endl;
+    os << "Exam name, " << examName << endl;
+    os << endl;
+    os << results.size() << " results found." << endl;
+    sort(results.begin(), results.end(), [](json a, json b) {
+        return a["correctPoints"].get<int>() + a["negativePoints"].get<int>() > b["correctPoints"].get<int>() + b["negativePoints"].get<int>();
+    });
+    for (int i = 0; i < results.size(); i++) {
+        os << "Result number " << i + 1 << "," << endl;
+        os << ",User id, " << results[i]["userId"].get<string>() << endl;
+        os << ",Exam result, ";
+        os << "User got " << results[i]["correctPoints"].get<int>() + results[i]["negativePoints"].get<int>() << " out of " << results[i]["totalPoints"].get<int>() << endl;
+        os << endl;
+        os << endl;
+    }
+    os << endl;
+    os << "Average score, " << findAverage() << endl;
+    os << "Highest score, " << findHighest() << endl;
+    os << endl;
 }
 
 #endif
